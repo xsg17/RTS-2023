@@ -1,4 +1,3 @@
-//#define SENSOR_MODULE
 #include "includes.h"
 #include "sensor.h"
 #include "motor.h"

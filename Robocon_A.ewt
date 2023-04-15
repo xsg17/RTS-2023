@@ -2435,6 +2435,9 @@
             <name>$PROJ_DIR$\BSP\Src\PID.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\BSP\Src\PWM.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\BSP\Src\r1v2.c</name>
         </file>
         <file>

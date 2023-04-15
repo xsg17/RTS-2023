@@ -12,7 +12,7 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <DebugChecksum>
-        <Checksum>4181152308</Checksum>
+        <Checksum>3068031481</Checksum>
     </DebugChecksum>
     <CodeCoverage>
         <Enabled>_ 0</Enabled>
@@ -164,7 +164,7 @@
     <Breakpoints2>
         <Bp0>_ 0 "EMUL_DATA" "curSpeed" 0 0 0 0 4294967295</Bp0>
         <Bp1>_ 0 "EMUL_CODE" "{$PROJ_DIR$\APP\app.c}.320.1" 0 0 1 "" 0 "" 0</Bp1>
-        <Bp2>_ 1 "EMUL_CODE" "{$PROJ_DIR$\BSP\Src\sensor.c}.44.4" 0 0 1 "" 0 "" 0</Bp2>
+        <Bp2>_ 1 "EMUL_CODE" "{$PROJ_DIR$\BSP\Src\sensor.c}.44.11" 0 0 1 "" 0 "" 0</Bp2>
         <Count>3</Count>
     </Breakpoints2>
     <Aliases>
