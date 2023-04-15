@@ -1,0 +1,5 @@
+{
+    "ewp": "${workspaceFolder}\\Robocon_A.ewp",
+    "configuration": "Debug",
+    "toolchain": "d:\\air"
+}

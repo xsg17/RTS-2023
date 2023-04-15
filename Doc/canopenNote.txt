@@ -1,0 +1,94 @@
+== PDO ==
+#default RPDO ID :
+RPDO     Index     DefaultID
+ 0       0x1400     0x00000200 + CANid
+ 1       0x1401     0x00000300 + CANid 
+ 2       0x1402     0x00000400 + CANid
+ 3       0x1403     0x00000500 + CANid
+ 
+#default TPDO ID :
+TPDO     Index     DefaultID
+ 0       0x1800     0x00000180 + CANid
+ 1       0x1801     0x00000280 + CANid 
+ 2       0x1802     0x00000380 + CANid
+ 3       0x1803     0x00000480 + CANid
+
+== SDO ==
+#default RSDO ID (Send)    : 0x600 + CANid 
+#default TSDO ID (Response): 0x580 + CANid
+
+*Note: 
+[To Read/Write certain index of data : See reference 'CANOpen_memento.pdf']
+
+== Configure the PDO ==
+PDO Mapping Parameters [0x1600 - 0x1607]
+
+#Purpose: 1.make the amplifier automatically send the data of motor (velocity, current, torque)
+            in one CAN message.
+          2.make the amplifier automatically receive the target velocity and update all the
+            velocity of motors synchronously.
+
+#Step:    
+          0.Reset all amplifiers & check existence (node response : 0x700 + Node)
+            0x000           81         0   0               0          0  0  0  0
+
+          1.Set RPDO number of objects to zero.This disable the PDO.
+            ex: Node 4    1 Byte    RPDO1 map(0x1601)   SubIndex         Data
+            0x604           2F         1  16               0          0  0  0  0  
+
+          2.Set RPDO update the receiving message synchronously (ex: set 1 SYNC)
+            ex: Node 4    1 Byte    RPDO1 com(0x1401)   SubIndex         Data
+            0x604           2F         1  14               2          1  0  0  0  
+          
+          3.Map the programmed velocity to RPDO1 (set object 1601 sub-index 1 to the address of programmed velocity object[0x2341 S32] ) 
+            ex: Node 4    4 Byte    RPDO1 map(0x1601)   SubIndex         Data
+            0x604           23         1  16               1         20  0  41 23
+
+          4.Set TPDO number of objects to zero.This disable the PDO.
+            ex: Node 4    1 Byte    TPDO1 map(0x1A01)   SubIndex         Data
+            0x604           2F         1  1A               0          0  0  0  0  
+
+          5.Set TPDO to transmit message periodically (ex: set 1 SYNC)
+            ex: Node 4    1 Byte    TPDO1 com(0x1801)   SubIndex         Data
+            0x604           2F         1  18               2          1  0  0  0 
+
+          6.Map the actual velocity TPDO1 (set object 1A01 sub-index 1 to the address of actual velocity object[0x6069 S32] )
+            ex: Node 4    4 Byte    TPDO1 map(0x1A01)   SubIndex         Data
+            0x604           23         1  1A               1         20  0  69 60  
+         
+          7.Map the operaton mode to TPDO1 (set object 1A01 sub-index 2 to the address of actual torque object[0x6077 S16] )
+            ex: Node 4    4 Byte    TPDO1 map(0x1A01)   SubIndex         Data
+            0x604           23         1  1A               2         10  0  77 60
+
+          8.Set RPDO object number to 1(programmed velocity) 
+            ex: Node 4    1 Byte    TPDO1 map(0x1601)   SubIndex         Data
+            0x604           2F         1  16               0          1  0  0  0
+
+          9.Set TPDO object number to 2(actual velocity, actual torque) 
+            ex: Node 4    1 Byte    TPDO1 map(0x1A01)   SubIndex         Data
+            0x604           2F         1  1A               0          2  0  0  0 
+
+          [ 
+            Configure one of the amplifier to send SYNC message: (default SYNC message ID : 0x80)
+            0x604           23         5  10               0          80  0  0 40
+          ]
+
+          10.Set operation mode to velocity
+             0x604          2F        60  60               0          3  0  0  0 
+
+          11.Configure control word 
+             0x604          2B        40  60               0          3F 0  0  0
+
+          12.Put all nodes to operation mode
+             0x000           1         0   0               0          0  0  0  0 
+
+          [ 
+            Configure SYNC message cycle period to 10ms:
+            0x604           23         6  10               0          A  0  0  0
+          ] 
+
+             
+*Note:
+[Applicable to both RPDO & TPDO]
+[Reference : CANOpenProgrammersManual.pdf]
+ 

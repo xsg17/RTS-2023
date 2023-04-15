@@ -1,0 +1,15 @@
+"D:\Kipper\software\IAR\arm\bin\armproc.dll" 
+
+"D:\Kipper\software\IAR\arm\bin\armjlink2.dll" 
+
+"D:\Kipper\program\RTS\Robocon-2023-robot\Debug\Exe\Robocon_A.out" 
+
+--plugin="D:\Kipper\software\IAR\arm\bin\armbat.dll" 
+
+--device_macro="D:\Kipper\software\IAR\arm\config\debugger\ST\STM32F4xx.dmac" 
+
+--flash_loader="D:\Kipper\software\IAR\arm\config\flashloader\ST\FlashSTM32F427xI.board" 
+
+
+
+

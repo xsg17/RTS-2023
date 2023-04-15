@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "includes.h": "c",
+        "os.h": "c",
+        "r1v2.h": "c"
+    }
+}

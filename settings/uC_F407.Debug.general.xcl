@@ -1,0 +1,15 @@
+"E:\STM32\机器人\arm\bin\armproc.dll" 
+
+"E:\STM32\机器人\arm\bin\armjlink2.dll" 
+
+"E:\STM32\机器人\Robocon_code\Robocon2021_二车\上层\Debug\Exe\Robocon_A.out" 
+
+--plugin="E:\STM32\机器人\arm\bin\armbat.dll" 
+
+--device_macro="E:\STM32\机器人\arm\config\debugger\ST\STM32F4xx.dmac" 
+
+--macro="E:\STM32\机器人\Robocon_code\Robocon2021_二车\上层\cycle.mac" 
+
+
+
+

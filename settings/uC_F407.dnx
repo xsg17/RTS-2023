@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<settings>
+    <DebugChecksum>
+        <Checksum>886613222</Checksum>
+    </DebugChecksum>
+    <Stack>
+        <FillEnabled>0</FillEnabled>
+        <OverflowWarningsEnabled>1</OverflowWarningsEnabled>
+        <WarningThreshold>90</WarningThreshold>
+        <SpWarningsEnabled>1</SpWarningsEnabled>
+        <WarnLogOnly>1</WarnLogOnly>
+        <UseTrigger>1</UseTrigger>
+        <TriggerName>main</TriggerName>
+        <LimitSize>0</LimitSize>
+        <ByteLimit>50</ByteLimit>
+    </Stack>
+    <JLinkDriver>
+        <CStepIntDis>_ 0</CStepIntDis>
+        <LeaveTargetRunning>_ 0</LeaveTargetRunning>
+    </JLinkDriver>
+    <SWOTraceHWSettings>
+        <OverrideDefaultClocks>0</OverrideDefaultClocks>
+        <CpuClock>168000000</CpuClock>
+        <ClockAutoDetect>1</ClockAutoDetect>
+        <ClockWanted>7500000</ClockWanted>
+        <JtagSpeed>7500000</JtagSpeed>
+        <Prescaler>22</Prescaler>
+        <TimeStampPrescIndex>0</TimeStampPrescIndex>
+        <TimeStampPrescData>0</TimeStampPrescData>
+        <PcSampCYCTAP>1</PcSampCYCTAP>
+        <PcSampPOSTCNT>15</PcSampPOSTCNT>
+        <PcSampIndex>0</PcSampIndex>
+        <DataLogMode>0</DataLogMode>
+        <ITMportsEnable>0</ITMportsEnable>
+        <ITMportsTermIO>0</ITMportsTermIO>
+        <ITMportsLogFile>0</ITMportsLogFile>
+        <ITMlogFile>$PROJ_DIR$\ITM.log</ITMlogFile>
+    </SWOTraceHWSettings>
+    <CodeCoverage>
+        <Enabled>_ 0</Enabled>
+    </CodeCoverage>
+    <Disassembly>
+        <InstrCount>0</InstrCount>
+        <MixedMode>1</MixedMode>
+    </Disassembly>
+    <Exceptions>
+        <StopOnUncaught>_ 0</StopOnUncaught>
+        <StopOnThrow>_ 0</StopOnThrow>
+    </Exceptions>
+    <CallStack>
+        <ShowArgs>0</ShowArgs>
+    </CallStack>
+    <Trace1>
+        <Enabled>0</Enabled>
+        <ShowSource>1</ShowSource>
+    </Trace1>
+    <Trace2>
+        <Enabled>0</Enabled>
+        <ShowSource>0</ShowSource>
+    </Trace2>
+    <SWOTraceWindow>
+        <PcSampling>0</PcSampling>
+        <InterruptLogs>0</InterruptLogs>
+        <ForcedTimeStamps>0</ForcedTimeStamps>
+        <EventCPI>0</EventCPI>
+        <EventEXC>0</EventEXC>
+        <EventFOLD>0</EventFOLD>
+        <EventLSU>0</EventLSU>
+        <EventSLEEP>0</EventSLEEP>
+    </SWOTraceWindow>
+    <PowerLog>
+        <Title_0>I0</Title_0>
+        <Symbol_0>0 4 0</Symbol_0>
+        <LogEnabled>0</LogEnabled>
+        <GraphEnabled>0</GraphEnabled>
+        <ShowTimeLog>1</ShowTimeLog>
+        <LiveEnabled>0</LiveEnabled>
+        <LiveFile>PowerLogLive.log</LiveFile>
+    </PowerLog>
+    <DataLog>
+        <LogEnabled>0</LogEnabled>
+        <GraphEnabled>0</GraphEnabled>
+        <ShowTimeLog>1</ShowTimeLog>
+        <SumEnabled>0</SumEnabled>
+        <ShowTimeSum>1</ShowTimeSum>
+    </DataLog>
+    <InterruptLog>
+        <LogEnabled>0</LogEnabled>
+        <GraphEnabled>0</GraphEnabled>
+        <ShowTimeLog>1</ShowTimeLog>
+        <SumEnabled>0</SumEnabled>
+        <ShowTimeSum>1</ShowTimeSum>
+        <SumSortOrder>0</SumSortOrder>
+    </InterruptLog>
+    <EventLog>
+        <Title_0>Ch3</Title_0>
+        <Symbol_0>0 0 1</Symbol_0>
+        <Title_1>Ch2</Title_1>
+        <Symbol_1>0 0 1</Symbol_1>
+        <Title_2>Ch1</Title_2>
+        <Symbol_2>0 0 1</Symbol_2>
+        <Title_3>Ch0</Title_3>
+        <Symbol_3>0 0 1</Symbol_3>
+        <LogEnabled>0</LogEnabled>
+        <GraphEnabled>0</GraphEnabled>
+        <ShowTimeLog>1</ShowTimeLog>
+        <SumEnabled>0</SumEnabled>
+        <ShowTimeSum>1</ShowTimeSum>
+        <SumSortOrder>0</SumSortOrder>
+    </EventLog>
+    <TermIOLog>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+    </TermIOLog>
+    <LogFile>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+        <Category>_ 0</Category>
+    </LogFile>
+    <DriverProfiling>
+        <Enabled>0</Enabled>
+        <Mode>3</Mode>
+        <Graph>0</Graph>
+        <Symbiont>0</Symbiont>
+        <Exclusions />
+    </DriverProfiling>
+    <CallStackLog>
+        <Enabled>0</Enabled>
+    </CallStackLog>
+    <CallStackStripe>
+        <ShowTiming>1</ShowTiming>
+    </CallStackStripe>
+    <PowerProbe>
+        <Frequency>10000</Frequency>
+        <Probe0>I0</Probe0>
+        <ProbeSetup0>2 1 1 2 0 0</ProbeSetup0>
+    </PowerProbe>
+    <DisassembleMode>
+        <mode>0</mode>
+    </DisassembleMode>
+    <Breakpoints2>
+        <Bp0>_ 0 "EMUL_CODE" "0x08005CA0" 0 0 1 "" 0 "" 0</Bp0>
+        <Count>1</Count>
+    </Breakpoints2>
+    <Aliases>
+        <A0>_ "C:\Users\gjc\Desktop\2021.5.12上层机构（蓝牙直插，没有蜂鸣器）\APP\app.c" ""</A0>
+        <A1>_ "C:\Users\gjc\Desktop\2021.5.4上层机构（副控板）\BSP\Src\PID.c" ""</A1>
+        <A2>_ "C:\Users\gjc\Desktop\2021.5.8晚上层机构（副控板）（测试）\2021.5.7上层机构（副控板）\APP\app.c" ""</A2>
+        <A3>_ "E:\3 学习资源\3 RTS资源\RTS\2021程序\2021.3.30实验\APP\app.c" ""</A3>
+        <A4>_ "E:\3 学习资源\3 RTS资源\RTS\2021程序\2021.3.30实验\BSP\Src\stm32f4xx_it.c" ""</A4>
+        <A5>_ "E:\3 学习资源\3 RTS资源\RTS\2021程序\2021.3.30实验\Driver\CMSIS\Device\Src\system_stm32f4xx.c" ""</A5>
+        <A6>_ "E:\3 学习资源\3 RTS资源\RTS\2021程序\2021.3.30实验\UCOS\uCOS-III\Source\os_core.c" ""</A6>
+        <A7>_ "E:\STM32\机器人\Robocon\2021.4.25底盘1234+上层机构5678\BSP\Src\stm32f4xx_it.c" ""</A7>
+        <A8>_ "E:\STM32\机器人\Robocon\2021.4.25底盘1234+上层机构5678\Driver\CMSIS\Device\Src\system_stm32f4xx.c" ""</A8>
+        <A9>_ "E:\STM32\机器人\Robocon\2021.4.25底盘1234+上层机构5678\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_tim.c" ""</A9>
+        <A10>_ "E:\STM32\机器人\Robocon\2021.4.25底盘1234+上层机构5678\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_usart.c" ""</A10>
+        <A11>_ "E:\STM32\机器人\Robocon\2021.4.25底盘1234+上层机构5678\UCOS\uC-LIB\lib_math.c" ""</A11>
+        <A12>_ "E:\STM32\机器人\Robocon\2021.4.25底盘1234+上层机构5678\UCOS\uC-LIB\lib_mem.c" ""</A12>
+        <A13>_ "E:\STM32\机器人\Robocon\2021.4.25底盘1234+上层机构5678\UCOS\uCOS-III\Source\os_core.c" ""</A13>
+        <A14>_ "E:\STM32\机器人\Robocon\2021.4.25底盘1234+上层机构5678\UCOS\uCOS-III\Source\os_flag.c" ""</A14>
+        <A15>_ "E:\STM32\机器人\Robocon\2021.4.25底盘1234+上层机构5678\UCOS\uCOS-III\Source\os_sem.c" ""</A15>
+        <A16>_ "E:\STM32\机器人\Robocon\2021.4.28八电机+ACTION+手柄全程序，不冲突\APP\app.c" ""</A16>
+        <A17>_ "E:\STM32\机器人\Robocon\2021.4.28八电机+ACTION+手柄全程序，不冲突\BSP\Src\can.c" ""</A17>
+        <A18>_ "E:\STM32\机器人\Robocon\2021.4.28八电机+ACTION+手柄全程序，不冲突\BSP\Src\led.c" ""</A18>
+        <A19>_ "E:\STM32\机器人\Robocon\2021.5.3ucos完成\APP\app.c" ""</A19>
+        <A20>_ "E:\STM32\机器人\Robocon\2021.5.3两板通信完成\APP\app.c" ""</A20>
+        <A21>_ "E:\STM32\机器人\Robocon\2021.5.8上层机构测试程序\BSP\Src\PID.c" ""</A21>
+        <A22>_ "E:\STM32\机器人\Robocon\一车6.14\上层机构6.14\APP\app.c" ""</A22>
+        <A23>_ "E:\gjc\电控\2021.5.7上层机构（副控板）\APP\app.c" ""</A23>
+        <A24>_ "F:\Robocon Oct Match\2021.3.24实验\APP\app.c" ""</A24>
+        <A25>_ "F:\Robocon Oct Match\2021.3.24实验\BSP\Src\C620.c" ""</A25>
+        <A26>_ "F:\Robocon Oct Match\2021.3.24实验\BSP\Src\can.c" ""</A26>
+        <A27>_ "F:\Robocon Oct Match\2021.3.24实验\BSP\Src\led.c" ""</A27>
+        <A28>_ "F:\Robocon Oct Match\2021.3.24实验\UCOS\uCOS-III\Ports\os_cpu_c.c" ""</A28>
+        <A29>_ "F:\robocon 2021\2021.5.14\一车\上层机构\APP\app.c" ""</A29>
+        <A30>_ "F:\robocon 2021\2021.5.14\一车\上层机构\BSP\Src\PID.c" ""</A30>
+        <A31>_ "F:\robocon 2021\2021.5.14\一车\上层机构\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_tim.c" ""</A31>
+        <Count>32</Count>
+        <SuppressDialog>0</SuppressDialog>
+    </Aliases>
+</settings>
