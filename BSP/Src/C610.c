@@ -48,10 +48,7 @@ PIDType MotorPID5_C610 =  {0.10, 0.10,   0,0,0,0,0};
 PIDType MotorPID6_C610 =  {0.10, 0.10,   0,0,0,0,0};
 PIDType MotorPID7_C610 =  {0.10, 0.10,   0,0,0,0,0};
 PIDType MotorPID8_C610 =  {0.10, 0.10,   0,0,0,0,0};
-//PIDType MotorPID5_C610 =  {10, 0.25,   0,0,0,15,0};
-//PIDType MotorPID6_C610 =  {10, 0.25,   0,0,0,15,0};
-//PIDType MotorPID7_C610 =  {10, 0.25,   0,0,0,15,0};
-//PIDType MotorPID8_C610 =  {10, 0.25,   0,0,0,15,0};
+
 
 extern C620 MOTOR[9];
 char MotorData_C610[8];
@@ -122,10 +119,7 @@ void Motor_Analyze_C610(CanRxMsg *canmsg)
   MOTOR_C610[Motor_Id].CurPosition = MotorVal_C610[Motor_Id][0];
   MOTOR_C610[Motor_Id].CurSpeed = MotorVal_C610[Motor_Id][1];
   MOTOR_C610[Motor_Id].ActCurrent = MotorVal_C610[Motor_Id][2];
-// for(i=0;i<8;i++)
-// {
-//   MOTOR_C610[Motor_Id].CurSpeed=-MOTOR_C610[Motor_Id].CurSpeed;
-// }
+
 }
 
 
@@ -155,11 +149,7 @@ void Motor_Analyze_C610(CanRxMsg *canmsg)
 
 void Motor_Speed_Ctrl_C610 (void)       
 {
-//  MOTOR_C610[1].OutCurrent += PIDCal(&Motor1PID_C610, Wheel[1].Target_V - MOTOR_C610[1].CurSpeed);
-//  MOTOR_C610[2].OutCurrent += PIDCal(&Motor2PID_C610, Wheel[2].Target_V - MOTOR_C610[2].CurSpeed);
-//  MOTOR_C610[3].OutCurrent += PIDCal(&Motor3PID_C610, Wheel[3].Target_V - MOTOR_C610[3].CurSpeed);
-//  MOTOR_C610[4].OutCurrent += PIDCal(&Motor4PID_C610, Wheel[4].Target_V - MOTOR_C610[4].CurSpeed);
-  MOTOR_C610[1].OutCurrent += PIDCal(&Motor1PID_C610, MOTOR_C610[1].ExpSpeed - MOTOR_C610[1].CurSpeed);
+ MOTOR_C610[1].OutCurrent += PIDCal(&Motor1PID_C610, MOTOR_C610[1].ExpSpeed - MOTOR_C610[1].CurSpeed);
   MOTOR_C610[2].OutCurrent += PIDCal(&Motor2PID_C610, MOTOR_C610[2].ExpSpeed - MOTOR_C610[2].CurSpeed);
   MOTOR_C610[3].OutCurrent += PIDCal(&Motor3PID_C610, MOTOR_C610[3].ExpSpeed - MOTOR_C610[3].CurSpeed);
   MOTOR_C610[4].OutCurrent += PIDCal(&Motor4PID_C610, MOTOR_C610[4].ExpSpeed - MOTOR_C610[4].CurSpeed);
@@ -289,15 +279,6 @@ void Motor_Position_Ctrl_C610(void)
    {
      MOTOR_C610[8].ExpSpeed=-1.05*MOTOR_C610[8].Expvel;
    }
-  
-//  MOTOR_C610[1].ExpSpeed=PIDCal(&MotorPID1_C610, MOTOR_C610[1].Exparg - MOTOR_C610[1].Temparg);
-//  MOTOR_C610[2].ExpSpeed=PIDCal(&MotorPID2_C610, MOTOR_C610[2].Exparg - MOTOR_C610[2].Temparg);
-//  MOTOR_C610[3].ExpSpeed=PIDCal(&MotorPID3_C610, MOTOR_C610[3].Exparg - MOTOR_C610[3].Temparg);
-//  MOTOR_C610[4].ExpSpeed=PIDCal(&MotorPID4_C610, MOTOR_C610[4].Exparg - MOTOR_C610[4].Temparg);
-//  MOTOR_C610[5].ExpSpeed=PIDCal(&MotorPID5_C610, MOTOR_C610[5].Exparg - MOTOR_C610[5].Temparg);
-//  MOTOR_C610[6].ExpSpeed=PIDCal(&MotorPID6_C610, MOTOR_C610[6].Exparg - MOTOR_C610[6].Temparg);
-//  MOTOR_C610[7].ExpSpeed=PIDCal(&MotorPID7_C610, MOTOR_C610[7].Exparg - MOTOR_C610[7].Temparg);
-//  MOTOR_C610[8].ExpSpeed=PIDCal(&MotorPID8_C610, MOTOR_C610[8].Exparg - MOTOR_C610[8].Temparg);
 
 }
 

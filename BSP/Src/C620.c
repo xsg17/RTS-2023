@@ -27,10 +27,6 @@ PIDType Motor5PID =  {7, 0.7, 0,0,0,0,0};//舵轮OK，反应快，超调小
 PIDType Motor6PID =  {13, 0.72, 0,0,0,0,0};
 PIDType Motor7PID =  {7, 0.7, 0,0,0,0,0};
 PIDType Motor8PID =  {7, 0.7, 0,0,0,0,0};
-//PIDType Motor5PID =  {17.5, 0.85,   0,0,0,0,0};
-//PIDType Motor6PID =  {17.5, 0.85,   0,0,0,0,0};
-//PIDType Motor7PID =  {17.5, 0.85,   0,0,0,0,0};
-//PIDType Motor8PID =  {17.5, 0.85,   0,0,0,0,0};
 
 
 //位置环
@@ -43,10 +39,7 @@ PIDType MotorPID5 =  {0.10, 0.10,   0,0,0,0,0};
 PIDType MotorPID6 =  {0.3, 0.10,   0,0,0,0,0};
 PIDType MotorPID7 =  {0.10, 0.10,   0,0,0,0,0};
 PIDType MotorPID8 =  {0.10, 0.10,   0,0,0,0,0};
-//PIDType MotorPID5 =  {10, 0.25,   0,0,0,15,0};
-//PIDType MotorPID6 =  {10, 0.25,   0,0,0,15,0};
-//PIDType MotorPID7 =  {10, 0.25,   0,0,0,15,0};
-//PIDType MotorPID8 =  {10, 0.25,   0,0,0,15,0};
+
 
 ROBOT_DJ_EXT C620      MOTOR[9];
 
@@ -133,25 +126,12 @@ void Motor_Analyze(CanRxMsg *canmsg)
 *
 *********************************************************************************************************
 */
-/*void Motor_Speed_Ctrl (void)
-{
-  MOTOR[1].OutCurrent += PIDCal(&Motor1PID, MOTOR[1].ExpSpeed - MOTOR[1].CurSpeed);
-  MOTOR[2].OutCurrent += PIDCal(&Motor2PID, MOTOR[2].ExpSpeed - MOTOR[2].CurSpeed);
-  MOTOR[3].OutCurrent += PIDCal(&Motor3PID, MOTOR[3].ExpSpeed - MOTOR[3].CurSpeed);
-  MOTOR[4].OutCurrent += PIDCal(&Motor4PID, MOTOR[4].ExpSpeed - MOTOR[4].CurSpeed);
-  MOTOR[5].OutCurrent += PIDCal(&Motor5PID, MOTOR[5].ExpSpeed - MOTOR[5].CurSpeed);
-  MOTOR[6].OutCurrent += PIDCal(&Motor6PID, MOTOR[6].ExpSpeed - MOTOR[6].CurSpeed);
-  MOTOR[7].OutCurrent += PIDCal(&Motor7PID, MOTOR[7].ExpSpeed - MOTOR[7].CurSpeed);
-  MOTOR[8].OutCurrent += PIDCal(&Motor8PID, MOTOR[8].ExpSpeed - MOTOR[8].CurSpeed);
-}*/
+
 
 
 void Motor_Speed_Ctrl_C620 (void)       //2021.4.9为消除冲突，修改名称Motor_Speed_Ctrl->Motor_Speed_Ctrl_C620
 {
-//  MOTOR[1].OutCurrent += PIDCal(&Motor1PID, Wheel[1].Target_V - MOTOR[1].CurSpeed);
-//  MOTOR[2].OutCurrent += PIDCal(&Motor2PID, Wheel[2].Target_V - MOTOR[2].CurSpeed);
-//  MOTOR[3].OutCurrent += PIDCal(&Motor3PID, Wheel[3].Target_V - MOTOR[3].CurSpeed);
-//  MOTOR[4].OutCurrent += PIDCal(&Motor4PID, Wheel[4].Target_V - MOTOR[4].CurSpeed);
+
   MOTOR[1].OutCurrent += PIDCal(&Motor1PID, MOTOR[1].ExpSpeed - MOTOR[1].CurSpeed);
   MOTOR[2].OutCurrent += PIDCal(&Motor2PID, MOTOR[2].ExpSpeed - MOTOR[2].CurSpeed);
   MOTOR[3].OutCurrent += PIDCal(&Motor3PID, MOTOR[3].ExpSpeed - MOTOR[3].CurSpeed);
