@@ -134,17 +134,7 @@ void Motor_Analyze_C610(CanRxMsg *canmsg)
 *
 *********************************************************************************************************
 */
-/*void Motor_Speed_Ctrl (void)
-{
-  MOTOR_C610[1].OutCurrent += PIDCal(&Motor1PID_C610, MOTOR_C610[1].ExpSpeed - MOTOR_C610[1].CurSpeed);
-  MOTOR_C610[2].OutCurrent += PIDCal(&Motor2PID_C610, MOTOR_C610[2].ExpSpeed - MOTOR_C610[2].CurSpeed);
-  MOTOR_C610[3].OutCurrent += PIDCal(&Motor3PID_C610, MOTOR_C610[3].ExpSpeed - MOTOR_C610[3].CurSpeed);
-  MOTOR_C610[4].OutCurrent += PIDCal(&Motor4PID_C610, MOTOR_C610[4].ExpSpeed - MOTOR_C610[4].CurSpeed);
-  MOTOR_C610[5].OutCurrent += PIDCal(&Motor5PID_C610, MOTOR_C610[5].ExpSpeed - MOTOR_C610[5].CurSpeed);
-  MOTOR_C610[6].OutCurrent += PIDCal(&Motor6PID_C610, MOTOR_C610[6].ExpSpeed - MOTOR_C610[6].CurSpeed);
-  MOTOR_C610[7].OutCurrent += PIDCal(&Motor7PID_C610, MOTOR_C610[7].ExpSpeed - MOTOR_C610[7].CurSpeed);
-  MOTOR_C610[8].OutCurrent += PIDCal(&Motor8PID_C610, MOTOR_C610[8].ExpSpeed - MOTOR_C610[8].CurSpeed);
-}*/
+
 
 
 void Motor_Speed_Ctrl_C610 (void)       
