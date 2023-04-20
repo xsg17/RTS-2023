@@ -15,38 +15,6 @@
 
 //  Kp      Ki       Kd     //速度环
 int16_t posdel_C610[9];
-// 三舵轮速度环
-PIDType Motor1PID_C610 = {0.7, 0.02, 0, 0, 0, 0, 0}; // 舵轮OK，反应快，超调小
-PIDType Motor2PID_C610 = {0.7, 0.02, 0, 0, 0, 0, 0};
-PIDType Motor3PID_C610 = {0.7, 0.02, 0, 0, 0, 0, 0};
-
-PIDType Motor4PID_C610 = {7, 0.7, 0, 0, 0, 0, 0};
-
-PIDType Motor5PID_C610 = {7, 0.7, 0, 0, 0, 0, 0}; // 舵轮OK，反应快，超调小
-PIDType Motor6PID_C610 = {7, 0.7, 0, 0, 0, 0, 0};
-PIDType Motor7PID_C610 = {7, 0.7, 0, 0, 0, 0, 0};
-PIDType Motor8PID_C610 = {7, 0.7, 0, 0, 0, 0, 0};
-// PIDType Motor5PID_C610 =  {17.5, 0.85,   0,0,0,0,0};
-// PIDType Motor6PID_C610 =  {17.5, 0.85,   0,0,0,0,0};
-// PIDType Motor7PID_C610 =  {17.5, 0.85,   0,0,0,0,0};
-// PIDType Motor8PID_C610 =  {17.5, 0.85,   0,0,0,0,0};
-
-// 位置环
-// 三舵轮角度环
-PIDType MotorPID1_C610 = {2, 0.1, 0.0, 0, 0, 0, 0}; // 1,0.05
-PIDType MotorPID2_C610 = {2, 0.1, 0.0, 0, 0, 0, 0};
-PIDType MotorPID3_C610 = {2, 0.1, 0.0, 0, 0, 0, 0};
-
-PIDType MotorPID4_C610 = {0.10, 0.10, 0, 0, 0, 0, 0};
-
-PIDType MotorPID5_C610 = {0.10, 0.10, 0, 0, 0, 0, 0};
-PIDType MotorPID6_C610 = {0.10, 0.10, 0, 0, 0, 0, 0};
-PIDType MotorPID7_C610 = {0.10, 0.10, 0, 0, 0, 0, 0};
-PIDType MotorPID8_C610 = {0.10, 0.10, 0, 0, 0, 0, 0};
-// PIDType MotorPID5_C610 =  {10, 0.25,   0,0,0,15,0};
-// PIDType MotorPID6_C610 =  {10, 0.25,   0,0,0,15,0};
-// PIDType MotorPID7_C610 =  {10, 0.25,   0,0,0,15,0};
-// PIDType MotorPID8_C610 =  {10, 0.25,   0,0,0,15,0};
 
 extern C620 MOTOR[9];
 char MotorData_C610[8];
@@ -115,10 +83,6 @@ void Motor_Analyze_C610(CanRxMsg *canmsg)
   MOTOR_C610[Motor_Id].CurPosition = MotorVal_C610[Motor_Id][0];
   MOTOR_C610[Motor_Id].CurSpeed = MotorVal_C610[Motor_Id][1];
   MOTOR_C610[Motor_Id].ActCurrent = MotorVal_C610[Motor_Id][2];
-  // for(i=0;i<8;i++)
-  // {
-  //   MOTOR_C610[Motor_Id].CurSpeed=-MOTOR_C610[Motor_Id].CurSpeed;
-  // }
 }
 
 /*
@@ -131,24 +95,9 @@ void Motor_Analyze_C610(CanRxMsg *canmsg)
 *
 *********************************************************************************************************
 */
-/*void Motor_Speed_Ctrl (void)
-{
-  MOTOR_C610[1].OutCurrent += PIDCal(&Motor1PID_C610, MOTOR_C610[1].ExpSpeed - MOTOR_C610[1].CurSpeed);
-  MOTOR_C610[2].OutCurrent += PIDCal(&Motor2PID_C610, MOTOR_C610[2].ExpSpeed - MOTOR_C610[2].CurSpeed);
-  MOTOR_C610[3].OutCurrent += PIDCal(&Motor3PID_C610, MOTOR_C610[3].ExpSpeed - MOTOR_C610[3].CurSpeed);
-  MOTOR_C610[4].OutCurrent += PIDCal(&Motor4PID_C610, MOTOR_C610[4].ExpSpeed - MOTOR_C610[4].CurSpeed);
-  MOTOR_C610[5].OutCurrent += PIDCal(&Motor5PID_C610, MOTOR_C610[5].ExpSpeed - MOTOR_C610[5].CurSpeed);
-  MOTOR_C610[6].OutCurrent += PIDCal(&Motor6PID_C610, MOTOR_C610[6].ExpSpeed - MOTOR_C610[6].CurSpeed);
-  MOTOR_C610[7].OutCurrent += PIDCal(&Motor7PID_C610, MOTOR_C610[7].ExpSpeed - MOTOR_C610[7].CurSpeed);
-  MOTOR_C610[8].OutCurrent += PIDCal(&Motor8PID_C610, MOTOR_C610[8].ExpSpeed - MOTOR_C610[8].CurSpeed);
-}*/
 
 void Motor_Speed_Ctrl_C610(void)
 {
-  //  MOTOR_C610[1].OutCurrent += PIDCal(&Motor1PID_C610, Wheel[1].Target_V - MOTOR_C610[1].CurSpeed);
-  //  MOTOR_C610[2].OutCurrent += PIDCal(&Motor2PID_C610, Wheel[2].Target_V - MOTOR_C610[2].CurSpeed);
-  //  MOTOR_C610[3].OutCurrent += PIDCal(&Motor3PID_C610, Wheel[3].Target_V - MOTOR_C610[3].CurSpeed);
-  //  MOTOR_C610[4].OutCurrent += PIDCal(&Motor4PID_C610, Wheel[4].Target_V - MOTOR_C610[4].CurSpeed);
   MOTOR_C610[1].OutCurrent += PIDCal(&Motor1PID_C610, MOTOR_C610[1].ExpSpeed - MOTOR_C610[1].CurSpeed);
   MOTOR_C610[2].OutCurrent += PIDCal(&Motor2PID_C610, MOTOR_C610[2].ExpSpeed - MOTOR_C610[2].CurSpeed);
   MOTOR_C610[3].OutCurrent += PIDCal(&Motor3PID_C610, MOTOR_C610[3].ExpSpeed - MOTOR_C610[3].CurSpeed);
@@ -264,15 +213,6 @@ void Motor_Position_Ctrl_C610(void)
   {
     MOTOR_C610[8].ExpSpeed = -1.05 * MOTOR_C610[8].Expvel;
   }
-
-  //  MOTOR_C610[1].ExpSpeed=PIDCal(&MotorPID1_C610, MOTOR_C610[1].Exparg - MOTOR_C610[1].Temparg);
-  //  MOTOR_C610[2].ExpSpeed=PIDCal(&MotorPID2_C610, MOTOR_C610[2].Exparg - MOTOR_C610[2].Temparg);
-  //  MOTOR_C610[3].ExpSpeed=PIDCal(&MotorPID3_C610, MOTOR_C610[3].Exparg - MOTOR_C610[3].Temparg);
-  //  MOTOR_C610[4].ExpSpeed=PIDCal(&MotorPID4_C610, MOTOR_C610[4].Exparg - MOTOR_C610[4].Temparg);
-  //  MOTOR_C610[5].ExpSpeed=PIDCal(&MotorPID5_C610, MOTOR_C610[5].Exparg - MOTOR_C610[5].Temparg);
-  //  MOTOR_C610[6].ExpSpeed=PIDCal(&MotorPID6_C610, MOTOR_C610[6].Exparg - MOTOR_C610[6].Temparg);
-  //  MOTOR_C610[7].ExpSpeed=PIDCal(&MotorPID7_C610, MOTOR_C610[7].Exparg - MOTOR_C610[7].Temparg);
-  //  MOTOR_C610[8].ExpSpeed=PIDCal(&MotorPID8_C610, MOTOR_C610[8].Exparg - MOTOR_C610[8].Temparg);
 }
 
 /*
@@ -373,7 +313,7 @@ int32_t initparg_3508 = 0;        // 3508初始角度为0，夹取机构处于�
 int32_t openparg_2006 = 25000;    // 2006打开角度，夹环准备(25000)
 int32_t overparg_3508 = -42000;   // 3508转动180，放环准备(-60000)
 int32_t claparg_2006 = 1000;      // 2006夹环角度,根据环的个数进行调整(1000)
-int32_t releaseparg_2006 = 56000; // 2006放环角度(53000)
+int32_t releaseparg_2006 = 45000; // 2006放环角度(53000)
 
 int Capstep = 0; // 抓取步骤
 
@@ -384,7 +324,7 @@ void Pre_capture(void) // 夹环准备，打开之后向前怼一段距离，将
   MOTOR[5].Expvel = 2000;
   MOTOR[5].Exparg = initparg_3508;
   MOTOR[6].Expvel = 5000;
-  MOTOR[6].Exparg = initparg_2006;
+  MOTOR[6].Exparg = openparg_2006;
 }
 void Capture(void) // 抓取
 {
@@ -420,15 +360,6 @@ void Capture(void) // 抓取
     }
   }
 }
-
-// void Release_capture(void)
-// { // 抓取机构翻转后，将环放下
-//   if (abs(MOTOR[5].Temparg - MOTOR[5].Exparg) <= 500)
-//   {
-//     MOTOR[6].Expvel = 5000;
-//     MOTOR[6].Exparg = releaseparg_2006;
-//   }
-// }
 
 void Re_capture(void) // 环发射完成后，状态复原
 {

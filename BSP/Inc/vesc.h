@@ -151,7 +151,7 @@ void buffer_append_int32(uint8_t* buffer, int32_t number, int32_t *index);
 int16_t buffer_get_int16(const uint8_t *buffer, int32_t *index) ;
 int32_t buffer_get_int32(const uint8_t *buffer, int32_t *index);
 void Motor_Analyze_vesc(CanRxMsg *canmsg);
-void SetMotor_speed(uint8_t controller_id,float ExpSpeed);
+void SetMotor_speed_VESC(uint8_t controller_id,float ExpSpeed);
 void comm_can_set_pos(uint8_t controller_id,float ExpPosition);
 void comm_can_set_current(uint8_t controller_id,float OutCurrent );
 void comm_can_set_current_brake(uint8_t controller_id, float OutCurrent ) ;

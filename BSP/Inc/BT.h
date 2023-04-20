@@ -166,7 +166,7 @@ void BT_usart3_init();				//����3��ʼ��
 #define triggerR      CH[11]
 
 #define switchR       CH[13]
-#define seitchL       CH[12]
+#define switchL       CH[12]
 
 #define button1       CH[6]              //从左到右 button6 无反应
 #define button2       CH[7] 

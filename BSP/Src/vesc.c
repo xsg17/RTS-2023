@@ -73,7 +73,7 @@ int32_t buffer_get_int32(const uint8_t *buffer, int32_t *index) {
 */
 
 
-void SetMotor_speed(uint8_t controller_id,float ExpSpeed) {
+void SetMotor_speed_VESC(uint8_t controller_id,float ExpSpeed) {
 	int32_t send_index = 0;
 	uint8_t buffer[4];
 	buffer_append_int32(buffer, (int32_t)ExpSpeed, &send_index);

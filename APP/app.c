@@ -276,6 +276,7 @@ static void TaskBTcom(void *p_arg)
         MOTOR[7].Expvel = 6000;
         MOTOR[7].Exparg += 157293.5; // 一圈
         trigger_flag = 0;
+        //Pre_capture();
       }
     }
     else
@@ -312,39 +313,26 @@ static void TaskBTcom(void *p_arg)
     {
     }
 
-    //    if(Pulley2 != Pulley2_MEM)
-    //    {
-    //      Mt = get_position((Pulley2-200.0)/200.0 + 31.0);
-    //      stepper_motor_run(Mt - current_position);
-    //    }
-    //
-    //    if(button1 >900)
-    //    {
-    //
-    //      switch(count){
-    //      case 0:
-    //         Pre_capture();
-    //         if(Pos_flag_2006()&&Pos_flag_3508()) count++;
-    //         else count=0;
-    //         break;
-    //      case 1:
-    //        Capture();
-    //        if(Release_flag()){
-    //            count++;
-    //        }
-    //        else count=1;
-    //          break;
-    //       case 2:
-    //        //OSTimeDlyHMSM(0u, 0u, 0u, 500u, OS_OPT_TIME_HMSM_STRICT, &err);
-    //          Release_capture();
-    //          if(Pos_flag_3508()){
-    //              count=-1;//停下来
-    //          }
-    //      }-+
-    //
-    //
-    //    }
-
+    if(Pulley2 != Pulley2_MEM)
+    {
+      Mt = get_position((Pulley2-200.0)/200.0 + 31.0);
+      stepper_motor_run(Mt - current_position);
+    }
+    if(switchL != switchL_MEM)
+    {
+      if (switchL >= 1200){
+        SetMotor_speed_VESC(1,0);
+        SetMotor_speed_VESC(2,0);
+      }
+      else if (switchL <= 500){
+        SetMotor_speed_VESC(1,500);
+        SetMotor_speed_VESC(2,500);
+      }
+      else{
+        SetMotor_speed_VESC(1,200);
+        SetMotor_speed_VESC(2,200);
+      }
+    }
     for (int i = 0; i < 18; i++)
     {
       CH_MEM[i] = CH[i];
