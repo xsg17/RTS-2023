@@ -42,7 +42,7 @@ extern volatile uint16_t step_count;          // 步进电机脉冲计数器
 extern volatile int32_t step_remain;          // 步进电机剩余步数
 extern volatile float target_position;        // 目标位置，单位为mm
 extern volatile float current_position;       // 当前位置，单位为mm
-extern volatile long float  step_speed;           // 步进电机当前速度
+extern volatile double  step_speed;           // 步进电机当前速度
 extern volatile int32_t step_accel; 
 
 /*

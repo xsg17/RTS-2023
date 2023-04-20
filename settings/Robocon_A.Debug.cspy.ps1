@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "D:\Kipper\software\IAR\common\bin\cspybat" -f "D:\Kipper\program\RTS\RTS-2023\settings\Robocon_A.Debug.general.xcl" --backend -f "D:\Kipper\program\RTS\RTS-2023\settings\Robocon_A.Debug.driver.xcl" 
+& "D:\Kipper\software\IAR\common\bin\cspybat" -f "C:\Users\18311\Desktop\修改版\settings\Robocon_A.Debug.general.xcl" --backend -f "C:\Users\18311\Desktop\修改版\settings\Robocon_A.Debug.driver.xcl" 
 }
 else
 {
-& "D:\Kipper\software\IAR\common\bin\cspybat" -f "D:\Kipper\program\RTS\RTS-2023\settings\Robocon_A.Debug.general.xcl" --debug_file=$debugfile --backend -f "D:\Kipper\program\RTS\RTS-2023\settings\Robocon_A.Debug.driver.xcl" 
+& "D:\Kipper\software\IAR\common\bin\cspybat" -f "C:\Users\18311\Desktop\修改版\settings\Robocon_A.Debug.general.xcl" --debug_file=$debugfile --backend -f "C:\Users\18311\Desktop\修改版\settings\Robocon_A.Debug.driver.xcl" 
 }

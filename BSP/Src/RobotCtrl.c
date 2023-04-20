@@ -173,7 +173,13 @@ void Formula_World2Robo (Velocity *world, Velocity *robo)  //可能有用
 *
 *********************************************************************************************************
 */
-
+//void Formula_4Omni (Motor_Data *wheel, Velocity *robo)
+//{
+  //wheel[1].Target_V = CONT * ( -COS45d * robo->Vx + COS45d * robo->Vy - FOUR_OMNI_D * robo->W ); //左上轮1
+  //wheel[2].Target_V = CONT * ( -COS45d * robo->Vx - COS45d * robo->Vy - FOUR_OMNI_D * robo->W ); //右下轮2
+  //wheel[3].Target_V = CONT * (  COS45d * robo->Vx - COS45d * robo->Vy - FOUR_OMNI_D * robo->W ); //右上轮3
+  //wheel[4].Target_V = CONT * (  COS45d * robo->Vx + COS45d * robo->Vy - FOUR_OMNI_D * robo->W ); //左下轮4
+//}
 
 /**
  * @brief 求麦轮四个轮子的速度
@@ -218,8 +224,8 @@ void Sendwheel_Vel (void)
   Motor_Speed_Ctrl_C620();  //2021.4.9为消除冲突，修改名称Motor_Speed_Ctrl->Motor_Speed_Ctrl_C620
 
   //向C620电调发送期望电流值
-  SetMotor();
-  SetMotor_h();
+  // SetMotor();
+  // SetMotor_h();
 }
 
 
@@ -237,9 +243,27 @@ void Sendwheel_Vel (void)
 */
 void Robot_Pos_Ctrl (void)
 {
-
+//  static float recVx = 0,recVy = 0;
+//  float jiasudu_x,jiasudu_y;
   RoboMotion.expSpeed.Vx = PIDCal_pos(&posxPID, RobotExpPos.pos_x - RobotPos.pos_x);
   RoboMotion.expSpeed.Vy = PIDCal_pos(&posyPID, RobotExpPos.pos_y - RobotPos.pos_y);
+//  if(RoboMotion.expSpeed.Vx < 0 || RoboMotion.expSpeed.Vy < 0)
+//  {
+//  if(RoboMotion.expSpeed.Vx > recVx || RoboMotion.expSpeed.Vy > recVy)
+//  {
+//    jiasudu_x = 1000*(RoboMotion.expSpeed.Vx - recVx)/SYNC_CYCLE;
+//    jiasudu_y = 1000*(RoboMotion.expSpeed.Vy - recVy)/SYNC_CYCLE; 
+//    
+//    if(jiasudu_x < 15000)
+//    {
+//      RoboMotion.expSpeed.Vx = recVx + 15000*SYNC_CYCLE/1000;
+//    }
+//    if(jiasudu_y < 15000)
+//    {
+//      RoboMotion.expSpeed.Vy = recVy + 15000*SYNC_CYCLE/1000;
+//    }
+//   }
+//  }
 
   // 速度限幅
   if(RoboMotion.expSpeed.Vx > Speed_Limit)
@@ -269,7 +293,8 @@ void Robot_Pos_Ctrl (void)
     RoboMotion.expSpeed.W = -Theta_Limit;
   }
 
-
+//  recVx = RoboMotion.expSpeed.Vx;
+//  recVy = RoboMotion.expSpeed.Vy;
 }
 
 

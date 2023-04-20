@@ -73,6 +73,7 @@ void Position_Ctrl_C610(void);
 
 void Pre_capture(void);//抓取准备
 void Capture(void); //抓取机构，2006，3508同时控制
+void Release_capture(void);//抓取机构翻转后，将环放下
 void Re_capture(void);//复原抓取机构位置
 int Pos_flag_2006(void);//2006电机位置标志
 int Pos_flag_3508(void);//3508电机位置标志

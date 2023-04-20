@@ -1,17 +1,17 @@
 /*          AUX     MD0
-   Í¨ÐÅ     0       0
-   ÅäÖÃ     0       1
-   Éý¼¶     1       1
+   Í¨ï¿½ï¿½     0       0
+   ï¿½ï¿½ï¿½ï¿½     0       1
+   ï¿½ï¿½ï¿½ï¿½     1       1
 
 */
 #include "includes.h"
 #include "BT.h"
-#define  BT_MODULE
- u8 res=0;
-//u8 USART3_TX_BUF[USART3_MAX_SEND_LEN];
+#define BT_MODULE
+u8 res = 0;
+// u8 USART3_TX_BUF[USART3_MAX_SEND_LEN];
 
-// ËÙ¶È²âÊÔ±äÁ¿
-float USE_TIME = 0; // ÈÎÎñ¼ÆÊ±±äÁ¿
+// ï¿½Ù¶È²ï¿½ï¿½Ô±ï¿½ï¿½ï¿½
+float USE_TIME = 0; // ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
 
 u8 BT_Step = 0;
 u8 BT_Count = 0;
@@ -19,196 +19,287 @@ u8 KEY_VALUE;
 
 union
 {
-  int16_t  result[6];
+  int16_t result[6];
   char data[12];
-}data1;
+} data1;
 
-      //´®¿Ú³õÊ¼»¯
+// ï¿½ï¿½ï¿½Ú³ï¿½Ê¼ï¿½ï¿½
 void BT_usart3_init()
 {
-        NVIC_InitTypeDef NVIC_InitStructure;
-        GPIO_InitTypeDef GPIO_InitStructure;
-        USART_InitTypeDef USART_InitStructure;
+  NVIC_InitTypeDef NVIC_InitStructure;
+  GPIO_InitTypeDef GPIO_InitStructure;
+  USART_InitTypeDef USART_InitStructure;
 
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,ENABLE);      //Ê¹ÄÜGPIOBÊ±ÖÓ
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);     //Ê¹ÄÜUSART3Ê±ÖÓ
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);  // Ê¹ï¿½ï¿½GPIOBÊ±ï¿½ï¿½
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE); // Ê¹ï¿½ï¿½USART3Ê±ï¿½ï¿½
 
- 	USART_DeInit(USART3);                                     //¸´Î»´®¿Ú3
-	
-	GPIO_PinAFConfig(GPIOB,GPIO_PinSource11,GPIO_AF_USART3);  //GPIOB11¸´ÓÃÎªUSART3
-	GPIO_PinAFConfig(GPIOB,GPIO_PinSource10,GPIO_AF_USART3);  //GPIOB10¸´ÓÃÎªUSART3	
-	
-        GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_10;  //GPIOB11ºÍGPIOB10³õÊ¼»¯
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;              //¸´ÓÃ¹¦ÄÜ
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	      //ËÙ¶È50MHz
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;            //ÍÆÍì¸´ÓÃÊä³ö
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;              //ÉÏÀ­
-	GPIO_Init(GPIOB,&GPIO_InitStructure);                     //³õÊ¼»¯GPIOB11£¬ºÍGPIOB10
-	
-	USART_InitStructure.USART_BaudRate = 115200;                                    //²¨ÌØÂÊ 
-	USART_InitStructure.USART_WordLength = USART_WordLength_8b;                    //×Ö³¤Îª8Î»Êý¾Ý¸ñÊ½
-	USART_InitStructure.USART_StopBits = USART_StopBits_1;                         //Ò»¸öÍ£Ö¹Î»
-	USART_InitStructure.USART_Parity = USART_Parity_No;                            //ÎÞÆæÅ¼Ð£ÑéÎ»
-	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;//ÎÞÓ²¼þÊý¾ÝÁ÷¿ØÖÆ
-	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;       	       //ÊÕ·¢Ä£Ê½
-        USART_Init(USART3, &USART_InitStructure);                                      //³õÊ¼»¯´®¿Ú3
- 
-	USART_Cmd(USART3, ENABLE);                                                     //Ê¹ÄÜ´®¿Ú 
-	
-        USART_ITConfig(USART3,USART_IT_RXNE, ENABLE);            //¿ªÆôÖÐ¶Ï  
-        
-	
-	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=2 ;//ÇÀÕ¼ÓÅÏÈ¼¶2
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//×ÓÓÅÏÈ¼¶3
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQÍ¨µÀÊ¹ÄÜ
-        NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//ÉèÖÃÏµÍ³ÖÐ¶ÏÓÅÏÈ¼¶·Ö×é2
-	NVIC_Init(&NVIC_InitStructure);	                        //¸ù¾ÝÖ¸¶¨µÄ²ÎÊý³õÊ¼»¯VIC¼Ä´æÆ÷
+  USART_DeInit(USART3); // ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½3
+
+  GPIO_PinAFConfig(GPIOB, GPIO_PinSource11, GPIO_AF_USART3); // GPIOB11ï¿½ï¿½ï¿½ï¿½ÎªUSART3
+  GPIO_PinAFConfig(GPIOB, GPIO_PinSource10, GPIO_AF_USART3); // GPIOB10ï¿½ï¿½ï¿½ï¿½ÎªUSART3
+
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_10; // GPIOB11ï¿½ï¿½GPIOB10ï¿½ï¿½Ê¼ï¿½ï¿½
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;             // ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;        // ï¿½Ù¶ï¿½50MHz
+  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;           // ï¿½ï¿½ï¿½ì¸´ï¿½ï¿½ï¿½ï¿½ï¿½
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;             // ï¿½ï¿½ï¿½ï¿½
+  GPIO_Init(GPIOB, &GPIO_InitStructure);                   // ï¿½ï¿½Ê¼ï¿½ï¿½GPIOB11ï¿½ï¿½ï¿½ï¿½GPIOB10
+
+  USART_InitStructure.USART_BaudRate = 115200;                                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  USART_InitStructure.USART_WordLength = USART_WordLength_8b;                     // ï¿½Ö³ï¿½Îª8Î»ï¿½ï¿½ï¿½Ý¸ï¿½Ê½
+  USART_InitStructure.USART_StopBits = USART_StopBits_1;                          // Ò»ï¿½ï¿½Í£Ö¹Î»
+  USART_InitStructure.USART_Parity = USART_Parity_No;                             // ï¿½ï¿½ï¿½ï¿½Å¼Ð£ï¿½ï¿½Î»
+  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None; // ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;                 // ï¿½Õ·ï¿½Ä£Ê½
+  USART_Init(USART3, &USART_InitStructure);                                       // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½3
+
+  USART_Cmd(USART3, ENABLE); // Ê¹ï¿½Ü´ï¿½ï¿½ï¿½
+
+  USART_ITConfig(USART3, USART_IT_RXNE, ENABLE); // ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
+
+  NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2; // ï¿½ï¿½Õ¼ï¿½ï¿½ï¿½È¼ï¿½2
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;        // ï¿½ï¿½ï¿½ï¿½ï¿½È¼ï¿½3
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;           // IRQÍ¨ï¿½ï¿½Ê¹ï¿½ï¿½
+  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);           // ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½2
+  NVIC_Init(&NVIC_InitStructure);                           // ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½VICï¿½Ä´ï¿½ï¿½ï¿½
 }
 
-//³õÊ¼»¯LoraÄ£¿éGPIO
+// ï¿½ï¿½Ê¼ï¿½ï¿½LoraÄ£ï¿½ï¿½GPIO
 void LoRa_Init(void)
 {
+  //      GPIO_InitTypeDef  GPIO_InitStructure;
+  ////      NVIC_InitTypeDef  NVIC_InitStructure;
+  //
+  //      RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC|RCC_AHB1Periph_GPIOF, ENABLE);//Ê¹ï¿½ï¿½GPIOC,GPIOFÊ±ï¿½ï¿½
+  ////      RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//Ê¹ï¿½ï¿½SYSCFGÊ±ï¿½ï¿½
+  //
+  //      //AUXï¿½ï¿½MD0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  //
+  //      GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0; //MD0ï¿½ï¿½ï¿½ï¿½
+  //      GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//ï¿½ï¿½ï¿½Ä£Ê½
+  //      GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  //      GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100M
+  //      GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;//ï¿½ï¿½ï¿½ï¿½
+  //      GPIO_Init(GPIOC, &GPIO_InitStructure);//ï¿½ï¿½Ê¼ï¿½ï¿½GPIOE2,3,4
+  //
+  //      GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6; //AUXï¿½ï¿½ï¿½ï¿½
+  //      GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½Ä£Ê½
+  //      GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100M
+  //      GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;//ï¿½ï¿½ï¿½ï¿½
+  //      GPIO_Init(GPIOF, &GPIO_InitStructure);//ï¿½ï¿½Ê¼ï¿½ï¿½
+  //
+  //     //ï¿½ï¿½ï¿½ï¿½ÎªÍ¨ï¿½ï¿½Ä£Ê½
+  //      AUX_OFF();
+  //      MD0_OFF();
 
-      
-      BT_usart3_init();//³õÊ¼»¯´®¿Ú3
-      
+  BT_usart3_init(); // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½3
 }
 
+// void usart1_init()
+//{
+//         NVIC_InitTypeDef NVIC_InitStructure;
+//         GPIO_InitTypeDef GPIO_InitStructure;
+//         USART_InitTypeDef USART_InitStructure;
+//
+//	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,ENABLE);      //Ê¹ï¿½ï¿½GPIOBÊ±ï¿½ï¿½
+//	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,ENABLE);     //Ê¹ï¿½ï¿½USART3Ê±ï¿½ï¿½
+//
+//  	USART_DeInit(USART1);                                     //ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½3
+//
+//	GPIO_PinAFConfig(GPIOA,GPIO_PinSource9,GPIO_AF_USART1);  //GPIOB11ï¿½ï¿½ï¿½ï¿½ÎªUSART3
+//	GPIO_PinAFConfig(GPIOA,GPIO_PinSource10,GPIO_AF_USART1);  //GPIOB10ï¿½ï¿½ï¿½ï¿½ÎªUSART3
+//
+//         GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9 | GPIO_Pin_10;  //GPIOB11ï¿½ï¿½GPIOB10ï¿½ï¿½Ê¼ï¿½ï¿½
+//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;              //ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½
+//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	      //ï¿½Ù¶ï¿½50MHz
+//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;            //ï¿½ï¿½ï¿½ì¸´ï¿½ï¿½ï¿½ï¿½ï¿½
+//	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;              //ï¿½ï¿½ï¿½ï¿½
+//	GPIO_Init(GPIOA,&GPIO_InitStructure);                     //ï¿½ï¿½Ê¼ï¿½ï¿½GPIOB11ï¿½ï¿½ï¿½ï¿½GPIOB10
+//
+//	USART_InitStructure.USART_BaudRate = 115200;                                    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//	USART_InitStructure.USART_WordLength = USART_WordLength_8b;                    //ï¿½Ö³ï¿½Îª8Î»ï¿½ï¿½ï¿½Ý¸ï¿½Ê½
+//	USART_InitStructure.USART_StopBits = USART_StopBits_1;                         //Ò»ï¿½ï¿½Í£Ö¹Î»
+//	USART_InitStructure.USART_Parity = USART_Parity_No;                            //ï¿½ï¿½ï¿½ï¿½Å¼Ð£ï¿½ï¿½Î»
+//	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;//ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;       	       //ï¿½Õ·ï¿½Ä£Ê½
+//         USART_Init(USART1, &USART_InitStructure);                                      //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½3
+//
+//	USART_Cmd(USART1, ENABLE);                                                     //Ê¹ï¿½Ü´ï¿½ï¿½ï¿½
+//
+//         USART_ITConfig(USART1,USART_IT_RXNE, ENABLE);            //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
+//
+//
+//	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
+//	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3;//ï¿½ï¿½Õ¼ï¿½ï¿½ï¿½È¼ï¿½2
+//	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//ï¿½ï¿½ï¿½ï¿½ï¿½È¼ï¿½3
+//	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQÍ¨ï¿½ï¿½Ê¹ï¿½ï¿½
+//         NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½2
+//	NVIC_Init(&NVIC_InitStructure);	                        //ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½VICï¿½Ä´ï¿½ï¿½ï¿½
+// }
 
+// Í¸ï¿½ï¿½ï¿½ï¿½ï¿½ä£¨ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½
+//     u8 Tran_Data[]={0};//Í¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// void LoRa_SendData1(void)
+//{
+//     sprintf((char*)Tran_Data,"0x01");
+//     u3_printf("%s\r\n",Tran_Data);
+// }
+//
+// void LoRa_SendData2(void)
+//{
+//
+//     sprintf((char*)Tran_Data,"0x02");
+//     u3_printf("%s\r\n",Tran_Data);
+// }
+//
+//
+// void u3_printf(char* fmt,...)
+//{
+//	u16 i,j;
+//	va_list ap;
+//	va_start(ap,fmt);
+//	vsprintf((char*)USART3_TX_BUF,fmt,ap);
+//	va_end(ap);
+//	i=strlen((const char*)USART3_TX_BUF);                     //ï¿½Ë´Î·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÝµÄ³ï¿½ï¿½ï¿½
+//	for(j=0;j<i;j++)                                          //Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//	{
+//	  while(USART_GetFlagStatus(USART3,USART_FLAG_TC)==RESET);//ï¿½È´ï¿½ï¿½Ï´Î´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//		USART_SendData(USART3,(uint8_t)USART3_TX_BUF[j]); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ýµï¿½ï¿½ï¿½ï¿½ï¿½3
+//
+//	}
+//
+//
+// }
 
-       
 void USART3_IRQHandler(void)
 {
   CPU_SR_ALLOC();
-  
+
   CPU_CRITICAL_ENTER();
   OSIntEnter(); // Tell uC/OS-III that we are starting an ISR
   CPU_CRITICAL_EXIT();
-    static union
+  static union
   {
     uint8_t data[12];
     float LaserVal[3];
-    
-  }Laserposture;
-	 if(USART_GetITStatus(USART3,USART_IT_RXNE)!=RESET)//½ÓÊÕµ½Êý¾Ý
-	{	 
-//               while((USART2->SR&0X40)==0);//µÈ´ý·¢ËÍ½áÊø
-		res = USART_ReceiveData(USART3);
-//                 USART_SendData(USART2,res);
-                    switch( BT_Step )
-                      {
-                        case 0:
-                        if( res == 0xbb )
-                            {
-                                  BT_Step++;
-                                  BT_Count = 0;
-                             }
-                        else
-                              BT_Step = 0;
-                              break;
-                            
-                          case 1:
-                            KEY_VALUE = res;
-                            BT_Step++;
-                            break;
-                            
-                          case 2:
-                            if( res == 0xee )
-                            {
-                              BT_Step = 0;
-                              BT_Count = 0;
-                            }
-                            else
-                              BT_Step = 0;
-                            break;
-                            
-                          default:
-                            BT_Step = 0;
-                            break;
-                      }
-//        while(USART_GetFlagStatus(USART2,USART_FLAG_TC)==RESET);//ÅÐ¶ÏÊÇ·ñ·¢ËÍÍê³É
-              
-             
-        }
-        USART_ClearITPendingBit(USART3,USART_IT_RXNE); // ÇåÖÐ¶Ï±êÖ¾
-        OSIntExit(); // Tell uC/OS-III that we are leaving the ISR 
- 
-}  
+
+  } Laserposture;
+  if (USART_GetITStatus(USART3, USART_IT_RXNE) != RESET) // ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½ï¿½
+  {
+    //               while((USART2->SR&0X40)==0);//ï¿½È´ï¿½ï¿½ï¿½ï¿½Í½ï¿½ï¿½ï¿½
+    res = USART_ReceiveData(USART3);
+    //                 USART_SendData(USART2,res);
+    switch (BT_Step)
+    {
+    case 0:
+      if (res == 0xbb)
+      {
+        BT_Step++;
+        BT_Count = 0;
+      }
+      else
+        BT_Step = 0;
+      break;
+
+    case 1:
+      KEY_VALUE = res;
+      BT_Step++;
+      break;
+
+    case 2:
+      if (res == 0xee)
+      {
+        BT_Step = 0;
+        BT_Count = 0;
+      }
+      else
+        BT_Step = 0;
+      break;
+
+    default:
+      BT_Step = 0;
+      break;
+    }
+    //        while(USART_GetFlagStatus(USART2,USART_FLAG_TC)==RESET);//ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  }
+  USART_ClearITPendingBit(USART3, USART_IT_RXNE); // ï¿½ï¿½ï¿½Ð¶Ï±ï¿½Ö¾
+  OSIntExit();                                    // Tell uC/OS-III that we are leaving the ISR
+}
 
 ///*
 //******************************************************************************
-//*    º¯ Êý Ãû    £ºBT_Send_Char(u8 Char)
-//*    Ãè    Êö    £ºÍ¨¹ýÀ¶ÑÀ·¢ËÍÒ»¸ö×Ö·û
-//*    ÊäÈë²ÎÊý    £º
-//*     pData      £º×Ö·û´®Ê×µØÖ·
-//*      len       £º×Ö·û´®³¤¶È
+//*    ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½    ï¿½ï¿½BT_Send_Char(u8 Char)
+//*    ï¿½ï¿½    ï¿½ï¿½    ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ö·ï¿½
+//*    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½    ï¿½ï¿½
+//*     pData      ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½×µï¿½Ö·
+//*      len       ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //******************************************************************************
 //*/
 void BT_Send_Char(u8 Char)
 {
-  USART_SendData( BT_USART, Char );
-  // µÈ´ý·¢ËÍÍê³ÉÒ»¸ö×Ö½Ú
-  while(USART_GetFlagStatus( BT_USART, USART_FLAG_TXE ) != SET );
+  USART_SendData(BT_USART, Char);
+  // ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ö½ï¿½
+  while (USART_GetFlagStatus(BT_USART, USART_FLAG_TXE) != SET)
+    ;
 }
 //
-void TestBt_Send_Float( float senddata )
+void TestBt_Send_Float(float senddata)
 {
-  char *add; // µØÖ·±äÁ¿£¬ÓÃÀ´´¢´ædataµÄµØÖ·
-  add = (char *)&senddata; // Òª´ø(unsigned char *)
-  for( uint8_t i = 0; i < 4; i++ )
+  char *add;               // ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½dataï¿½Äµï¿½Ö·
+  add = (char *)&senddata; // Òªï¿½ï¿½(unsigned char *)
+  for (uint8_t i = 0; i < 4; i++)
   {
-    BT_Send_Char( *( add + i ) );
+    BT_Send_Char(*(add + i));
   }
 }
 //
 /*
 *********************************************************************************************************
-* º¯ Êý Ãû   £ºsend_oled(void)
-* Ãè    Êö   £ºÏòÏÔÊ¾ÆÁ·¢ËÍÊý¾Ý
-**********************************	
+* ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½   ï¿½ï¿½send_oled(void)
+* ï¿½ï¿½    ï¿½ï¿½   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+**********************************
 * printf("Laser_distance:%d\n",Laser_distance);
 * printf("Laser_quality:%d\n",Laser_quality);
 *********************************************************************************************************
 */
 void send_oled(void)
 {
-  
-  data1.result[0] = RoboMotion.curSpeed.Vx ;
-  data1.result[1] = RoboMotion.curSpeed.Vy ;
-  data1.result[2] = USE_TIME ; // ÏÔÊ¾Ê±¼ä
+
+  data1.result[0] = RoboMotion.curSpeed.Vx;
+  data1.result[1] = RoboMotion.curSpeed.Vy;
+  data1.result[2] = USE_TIME; // ï¿½ï¿½Ê¾Ê±ï¿½ï¿½
   data1.result[3] = RobotPos.pos_x;
   data1.result[4] = RobotPos.pos_y;
-  data1.result[5] = RobotPos.zangle*100;
-  
-  
-  BT_Send_Char( 0xaa );//Ö¡Í·
-  BT_Send_Char( data1.data[0] );
-  BT_Send_Char( data1.data[1] );
-  BT_Send_Char( data1.data[2] );
-  BT_Send_Char( data1.data[3] );
-  BT_Send_Char( data1.data[4] );
-  BT_Send_Char( data1.data[5] );
-  BT_Send_Char( data1.data[6] );
-  BT_Send_Char( data1.data[7] );
-  BT_Send_Char( data1.data[8] );
-  BT_Send_Char( data1.data[9] );
-  BT_Send_Char( data1.data[10] );
-  BT_Send_Char( data1.data[11] );
-  BT_Send_Char( 0x01 );
-  BT_Send_Char( 0xff );
-  
-  	printf("RobotPos.pos_x:%3f\n",RobotPos.pos_x);
-  	printf("RobotPos.pos_y:%3f\n",RobotPos.pos_y);
-  	printf("RobotPos.zangle:%5f\n",RobotPos.zangle);
+  data1.result[5] = RobotPos.zangle * 100;
+
+  BT_Send_Char(0xaa); // Ö¡Í·
+  BT_Send_Char(data1.data[0]);
+  BT_Send_Char(data1.data[1]);
+  BT_Send_Char(data1.data[2]);
+  BT_Send_Char(data1.data[3]);
+  BT_Send_Char(data1.data[4]);
+  BT_Send_Char(data1.data[5]);
+  BT_Send_Char(data1.data[6]);
+  BT_Send_Char(data1.data[7]);
+  BT_Send_Char(data1.data[8]);
+  BT_Send_Char(data1.data[9]);
+  BT_Send_Char(data1.data[10]);
+  BT_Send_Char(data1.data[11]);
+  BT_Send_Char(0x01);
+  BT_Send_Char(0xff);
+
+  printf("RobotPos.pos_x:%3f\n", RobotPos.pos_x);
+  printf("RobotPos.pos_y:%3f\n", RobotPos.pos_y);
+  printf("RobotPos.zangle:%5f\n", RobotPos.zangle);
 }
 
 ///*
 //*********************************************************************************************************
-//* Brief    : ÖØ¶¨Ïò´®¿Ú
+//* Brief    : ï¿½Ø¶ï¿½ï¿½ò´®¿ï¿½
 //*********************************************************************************************************
 //*/
-//int fputc( int ch, FILE *f )
+// int fputc( int ch, FILE *f )
 //{
 //  USART_SendData( USART2, ( uint8_t ) ch );
 //  while( USART_GetFlagStatus( USART2, USART_FLAG_TXE ) != SET );

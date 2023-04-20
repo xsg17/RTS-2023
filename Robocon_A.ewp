@@ -2153,9 +2153,6 @@
             <name>$PROJ_DIR$\BSP\Src\PID.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\BSP\Src\PWM.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\BSP\Src\r1v2.c</name>
         </file>
         <file>
@@ -2166,9 +2163,6 @@
         </file>
         <file>
             <name>$PROJ_DIR$\BSP\Src\RobotCtrl.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\BSP\Src\sensor.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\BSP\Src\tim.c</name>
@@ -2192,9 +2186,6 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_dma.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_exti.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_gpio.c</name>
@@ -2252,6 +2243,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_dma2d.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_exti.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_flash.c</name>

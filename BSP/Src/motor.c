@@ -23,7 +23,89 @@
 #define  MOTOR_MODULE
 #include "motor.h"
 #include "PID.h"
+/*
+*********************************************************************************************************
+*                                            	DEFINES
+*********************************************************************************************************
+*/
 
+
+/*
+
+//全局变量定义
+volatile uint16_t step_count = 0;    // 步进电机脉冲计数器
+volatile int32_t step_remain = 0;    // 步进电机剩余步数
+volatile int32_t step_speed = 0;     // 步进电机当前速度
+volatile int32_t step_accel = 0;     // 步进电机当前加速度 
+// 函数声明
+
+
+// 定时器中断处理函数
+void TIM_IRQHandler(void)
+{
+    if(TIM_GetITStatus(TIM, TIM_IT_Update)!= RESET) //检查TIM2的中断是否已经发生，发生则返回SET（1）
+    {
+        // 更新步进电机脉冲计数器
+        if(step_count > 0)
+        {
+            GPIO_ToggleBits(GPIOA, STEP_PIN);     //反转电平
+            step_count--;
+        }
+
+        // 更新步进电机剩余步数和速度
+        if(step_remain > 0)
+        {
+            // 计算步进电机当前速度和加速度
+            if(step_speed < MAX_SPEED)  //速度小于标定速度时
+            {
+                step_accel = ACCEL_RATE;
+                step_speed += step_accel / TIM_ARR;
+            }
+            else                     //速度大于标定速度时
+            {
+                step_accel = 0;
+                step_speed = MAX_SPEED;
+            }
+
+            // 计算步进电机当前步距和脉冲计数器
+            int32_t step = (step_speed * TIM_ARR) / 1000;
+            step_remain -= step;
+            step_count = step;
+
+            // 更新步进电机方向
+            if(step_remain < 0)
+            {
+                GPIO_SetBits(GPIOA, DIR_PIN);
+            }
+            else
+            {
+                GPIO_ResetBits(GPIOA, DIR_PIN);
+            }
+        }
+
+        // 清除定时器中断标志
+        TIM_ClearITPendingBit(TIM, TIM_IT_Update);
+    }
+}
+
+
+
+
+
+// 步进电机控制函数
+void stepper_motor_run(int32_t steps)
+{
+    // 设置步进电机剩余步数
+    step_remain = steps;
+
+    // 等待步进电机停止
+    while(step_remain > 0);
+
+    // 停止步进电机
+    step_speed = 0;
+    step_accel = 0;
+}
+*/
 /*
 *********************************************************************************************************
 *                                            	ANOTHER
@@ -64,28 +146,29 @@ void TIM2_IRQHandler(void)
       step_speed = fabs(Stepper_Motor_PID(Stepper_Motor));
      
       // 更新当前位置
-       current_position += (direction == 0)?(step_speed/12000.0):(-1.0*step_speed/12000.0); 
+       current_position += (direction == 0)?(step_speed/5000.0):(-1.0*step_speed/5000.0); 
        
       step = step_speed*TIM_ARR/1000;     // 计算步进电机当前速度和加速度
       step_remain -= step;
       step_count = step;                 // 计算步进电机当前步距和脉冲计数器
+      //pre_count = target_position - current_position;
      
        // 更新步进电机方向
-     if((target_position - current_position)< -0.05)
+     if((target_position - current_position)< -0.2)
         {
             GPIO_ResetBits(GPIOA, DIR_PIN);
             direction = 1; 
             step_remain = -1*step_remain;
+            //GPIO_SetBits(GPIOA, DIR_PIN);
         }
-        else if((target_position - current_position) > 0.05)
+        else
         {
             GPIO_SetBits(GPIOA, DIR_PIN);
             direction = 0; 
+            //GPIO_ResetBits(GPIOA, DIR_PIN);
         }
-     else
-     {     
-     }
-      //GPIO_ToggleBits(GPIOA, DIR_PIN);
+     last_count = pre_count;
+      GPIO_ToggleBits(GPIOA, DIR_PIN);
       // 清除定时器中断标志
      TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
  }
@@ -162,7 +245,7 @@ void stepper_motor_run(float distance)
 float get_position(float angle)
 {
 
-   float position = (angle - 30)/0.1099;
+   float position = (angle -30.7888)/0.1099;
 
     return position;
 }

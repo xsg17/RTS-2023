@@ -18,12 +18,11 @@
 extern Point error, present, target;
 extern Velocity world;
 extern volatile float target_position, current_position;
-extern volatile long float step_speed; 
 
 PIDType X = {1.2,1, 0.7, 0, 0, 10, 0, 0};
 PIDType Y = {1.2,1, 0.7, 0, 0, 10, 0, 0};
 PIDType W = {5,1, 0.7, 0, 0, 0.02, 0, 0};
-PIDType Stepper_Motor = {10, 4, 2, 0, 0, 0.05, 0};
+PIDType Stepper_Motor = {10, 4, 2, 0, 0, 0.2, 0};
 //                    Kp     Ki    Kd
 //底盘PID参数 1 速度 3000
 PIDType VelxPID1  = { 1.055, 3.425, 0  , 0, 0, 0, 0  }; // <----------> X USE THIS PID PARAMETER
@@ -34,7 +33,9 @@ PIDType VelxPID2  = { 0.775, 1.825, 0  , 0, 0, 0, 0  }; // <----------> X USE TH
 PIDType VelyPID2  = { 0.775, 1.825, 0  , 0, 0, 0, 0  }; // <----------> Y USE THIS PID PARAMETER
 PIDType ThetaPID2 = { 1.00 , 0.70, 1.0, 0, 0, 0, 0  }; // <----------> Z USE THIS PID PARAMETER
   //ThetaPID2 former i =0.78
-
+// ????? 什么DOG东西 ?????
+//PIDType Velx_1PID = { 2.8, 0.10, 0, 0, 0, 0, 0 };
+//PIDType Vely_1PID = { 2.20, 0.05, 0, 0, 0, 0, 0 };
 // 位置PID参数
 PIDType posxPID = {1.7, 0.6, 0.5, 0, 0, 0, 0};
 PIDType posyPID = {1.7, 0.6, 0.5, 0, 0, 0, 0};//300,450,900,990      原始:1.5 0.6
@@ -48,7 +49,6 @@ int qValue[2] = {0,0};
 float qValueK[3];
 int msE  = 0;
 int msEC = 0;
-int last_speed = 0;
 extern float K1 = 0.03;
 extern float K2 = 0.009;
 extern float K3 = 0.001;
@@ -276,28 +276,34 @@ void Position_PID(PIDType PID_X, PIDType PID_Y, PIDType PID_Z)
 int Stepper_Motor_PID(PIDType PID)
 {
   PID.PreErr = target_position - current_position;
+  float speed = 0;
   
   if(fabs(PID.PreErr) <= fabs(PID.delErr))
   {
-    step_speed = 0;
+    speed = 0;
   }
   else
   {
-    if(step_speed <= MAX_SPEED)
+    if(speed <= MAX_SPEED)
     {
-       if((PID.KP * PID.PreErr + PID.KI * PID.SumErr + PID.KD * (PID.PreErr - PID.LastErr) - last_speed) >= ACCEL_RATE/TIM_ARR)
+       if(PID.KP * PID.PreErr + PID.KI * PID.SumErr + PID.KD * (PID.PreErr - PID.LastErr) >= ACCEL_RATE/TIM_ARR)
        {
-         step_speed += ACCEL_RATE/TIM_ARR;
+         speed += ACCEL_RATE/TIM_ARR;
        }
        else
        {
-         step_speed = fabs(PID.KP * PID.PreErr + PID.KI * PID.SumErr + PID.KD * (PID.PreErr - PID.LastErr));
+         if(PID.KP * PID.PreErr + PID.KI * PID.SumErr + PID.KD * (PID.PreErr - PID.LastErr)<0){
+         speed = fabs(PID.KP * PID.PreErr + PID.KI * PID.SumErr + PID.KD * (PID.PreErr - PID.LastErr));
+         }
+         else
+         {
+           speed = PID.KP * PID.PreErr + PID.KI * PID.SumErr + PID.KD * (PID.PreErr - PID.LastErr);
+         }
        }
     }
     else{
-      step_speed == MAX_SPEED;
+      speed == MAX_SPEED;
     } 
   }
-  last_speed = step_speed;
-  return step_speed;
+  return speed; 
 }
