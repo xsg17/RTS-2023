@@ -910,7 +910,7 @@
                     <item>openparg_2006</item>
                     <item>MotorPID7</item>
                     <item>capture_flag</item>
-                    <item></item>
+                    <item />
                 </expressions>
                 <col-names>
                     <item>Expression</item>

@@ -325,7 +325,7 @@ void  OSTimeDlyHMSM (CPU_INT16U   hours,
 
                                                                 /* Compute the total number of clock ticks required..   */
                                                                 /* .. (rounded to the nearest tick)                     */
-    tick_rate = OSCfg_TickRate_Hz;
+    tick_rate = OS_CFG_TICK_RATE_HZ;
     ticks     = ((OS_TICK)hours * (OS_TICK)3600u + (OS_TICK)minutes * (OS_TICK)60u + (OS_TICK)seconds) * tick_rate
               + (tick_rate * ((OS_TICK)milli + (OS_TICK)500u / tick_rate)) / (OS_TICK)1000u;
 

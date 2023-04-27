@@ -50,7 +50,7 @@ int32_t releaseparg_2006=140000;//2006放环角度
 static  uint8_t Capture_sign=0;//抓取标志状态
 
 
-ROBOT_DJ_EXT_C610 C610  	  MOTOR_C610[9];
+ROBOT_DJ_EXT_C610  C610  	  MOTOR_C610[9];
 
 //  CAN 配置
 #define	Motor_CAN_C610               CAN2

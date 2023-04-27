@@ -13,8 +13,39 @@
 *********************************************************************************************************
 */
 
-//  Kp      Ki       Kd     //速度环
 int16_t posdel_C610[9];
+// 三舵轮速度环
+PIDType Motor1PID_C610 = {0.7, 0.02, 0, 0, 0, 0, 0}; // 舵轮OK，反应快，超调小
+PIDType Motor2PID_C610 = {0.7, 0.02, 0, 0, 0, 0, 0};
+PIDType Motor3PID_C610 = {0.7, 0.02, 0, 0, 0, 0, 0};
+
+PIDType Motor4PID_C610 = {7, 0.7, 0, 0, 0, 0, 0};
+
+PIDType Motor5PID_C610 = {7, 0.7, 0, 0, 0, 0, 0}; // 舵轮OK，反应快，超调小
+PIDType Motor6PID_C610 = {7, 0.7, 0, 0, 0, 0, 0};
+PIDType Motor7PID_C610 = {7, 0.7, 0, 0, 0, 0, 0};
+PIDType Motor8PID_C610 = {7, 0.7, 0, 0, 0, 0, 0};
+// PIDType Motor5PID_C610 =  {17.5, 0.85,   0,0,0,0,0};
+// PIDType Motor6PID_C610 =  {17.5, 0.85,   0,0,0,0,0};
+// PIDType Motor7PID_C610 =  {17.5, 0.85,   0,0,0,0,0};
+// PIDType Motor8PID_C610 =  {17.5, 0.85,   0,0,0,0,0};
+
+// 位置环
+// 三舵轮角度环
+PIDType MotorPID1_C610 = {2, 0.1, 0.0, 0, 0, 0, 0}; // 1,0.05
+PIDType MotorPID2_C610 = {2, 0.1, 0.0, 0, 0, 0, 0};
+PIDType MotorPID3_C610 = {2, 0.1, 0.0, 0, 0, 0, 0};
+
+PIDType MotorPID4_C610 = {0.10, 0.10, 0, 0, 0, 0, 0};
+
+PIDType MotorPID5_C610 = {0.10, 0.10, 0, 0, 0, 0, 0};
+PIDType MotorPID6_C610 = {0.10, 0.10, 0, 0, 0, 0, 0};
+PIDType MotorPID7_C610 = {0.10, 0.10, 0, 0, 0, 0, 0};
+PIDType MotorPID8_C610 = {0.10, 0.10, 0, 0, 0, 0, 0};
+// PIDType MotorPID5_C610 =  {10, 0.25,   0,0,0,15,0};
+// PIDType MotorPID6_C610 =  {10, 0.25,   0,0,0,15,0};
+// PIDType MotorPID7_C610 =  {10, 0.25,   0,0,0,15,0};
+// PIDType MotorPID8_C610 =  {10, 0.25,   0,0,0,15,0};
 
 extern C620 MOTOR[9];
 char MotorData_C610[8];

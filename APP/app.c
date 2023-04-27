@@ -27,6 +27,8 @@
 *********************************************************************************************************
 */
 
+OS_ERR err;
+
 static OS_TCB TaskStartTCB;
 static CPU_STK TaskStartStk[TASK_START_STK_SIZE];
 
@@ -71,7 +73,7 @@ extern PIDType X, Y, W;
 
 int main() // 主函数
 {
-  OS_ERR err;
+  
 
   CPU_IntDis(); // Disable all Interrupts.
 
@@ -232,7 +234,8 @@ char flag_arbitraryPos = 0; // 设置位置环
 
 extern uint16_t CH[18]; // 通道值
 extern uint16_t CH_MEM[18];
-
+int preTick = 0;
+int Tick = 0;
 int speed_temp;
 double speed_mapping;
 int trigger_flag = 1, capture_flag = 1, release_flag = 1;
@@ -337,7 +340,11 @@ static void TaskBTcom(void *p_arg)
     {
       CH_MEM[i] = CH[i];
     }
-
+    Tick = OSTimeGet(&err);
+    Robot_Position_Update((Tick-preTick)/1000);
+    Robot_Speed_C620();
+    Position_PID(X, Y, W);
+    preTick = Tick;
     OSTimeDlyHMSM(0u, 0u, 0u, 5u, OS_OPT_TIME_HMSM_STRICT, &err);
   }
 }

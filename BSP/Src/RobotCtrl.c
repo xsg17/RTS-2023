@@ -27,7 +27,7 @@ extern vesc     MOTOR_V[15];
 extern C620  	MOTOR[9];
 
 Point error = {0,0,0};
-Point target = {0,1000,0};
+Point target = {1000,0,0};
 Point present = {0,0,0};
 
 int Center_Wheel_Length;
@@ -59,6 +59,7 @@ float COS45d;
 // verioty constants
 const double a=10;
 const double b=10;
+
 
 /*
 ********************************************************************************************************
@@ -445,23 +446,34 @@ void Robot_Speed_Update (void)
 void Robot_Speed_C620()
 {
   float tempX, tempY, tempW;
-  tempX = (MOTOR[1].CurSpeed-MOTOR[2].CurSpeed)/2.0*187.0/3591.0;  //*0.377
+//  tempX = (MOTOR[1].CurSpeed-MOTOR[2].CurSpeed)/2.0*187.0/3591.0;  //*0.377
+//  
+//  tempY = (MOTOR[1].CurSpeed+MOTOR[2].CurSpeed-MOTOR[3].CurSpeed-MOTOR[4].CurSpeed)/4.0*187.0/3591.0;  //*0.050
+//  
+//  tempW= (MOTOR[1].CurSpeed+MOTOR[2].CurSpeed+MOTOR[3].CurSpeed+MOTOR[4].CurSpeed)/4.0*187.0/3591.0;  //*0.385
+//  
+//  RoboMotionC620.curSpeed.Vy = ((0.3 * fabs(tempY) >= fabs(tempX)) || (0.3 * fabs(tempW) >= fabs(tempX))) ? 0.0 : (tempX*PI*120.0/60.0);
+//  RoboMotionC620.curSpeed.Vx = ((0.3 * fabs(tempX) >= fabs(tempY)) || (0.3 * fabs(tempW) >= fabs(tempY))) ? 0.0 : (tempY*PI*120.0/60.0);
+//  RoboMotionC620.curSpeed.W  = ((0.3 * fabs(tempX) >= fabs(tempW)) || (0.3 * fabs(tempY) >= fabs(tempW))) ? 0.0 : (tempW*PI*120.0/200.0/60.0);
+
+  tempX = (MOTOR[1].CurSpeed-MOTOR[2].CurSpeed)/2.0;
   
-  tempY = (MOTOR[1].CurSpeed+MOTOR[2].CurSpeed-MOTOR[3].CurSpeed-MOTOR[4].CurSpeed)/4.0*187.0/3591.0;  //*0.050
+  tempY = (MOTOR[1].CurSpeed+MOTOR[2].CurSpeed-MOTOR[3].CurSpeed-MOTOR[4].CurSpeed)/4.0;  
   
-  tempW= (MOTOR[1].CurSpeed+MOTOR[2].CurSpeed+MOTOR[3].CurSpeed+MOTOR[4].CurSpeed)/4.0*187.0/3591.0;  //*0.385
+  tempW= (MOTOR[1].CurSpeed+MOTOR[2].CurSpeed+MOTOR[3].CurSpeed+MOTOR[4].CurSpeed)/4.0;
   
-  RoboMotionC620.curSpeed.Vy = ((0.3 * fabs(tempY) >= fabs(tempX)) || (0.3 * fabs(tempW) >= fabs(tempX))) ? 0.0 : (tempX*PI*120.0/60.0);
-  RoboMotionC620.curSpeed.Vx = ((0.3 * fabs(tempX) >= fabs(tempY)) || (0.3 * fabs(tempW) >= fabs(tempY))) ? 0.0 : (tempY*PI*120.0/60.0);
-  RoboMotionC620.curSpeed.W  = ((0.3 * fabs(tempX) >= fabs(tempW)) || (0.3 * fabs(tempY) >= fabs(tempW))) ? 0.0 : (tempW*PI*120.0/200.0/60.0);
-       
+  RoboMotionC620.curSpeed.Vy = ((0.3 * fabs(tempY) >= fabs(tempX)) || (0.3 * fabs(tempW) >= fabs(tempX))) ? 0.0 : (tempX*PI*120.0);
+
+  RoboMotionC620.curSpeed.Vx = ((0.3 * fabs(tempX) >= fabs(tempY)) || (0.3 * fabs(tempW) >= fabs(tempY))) ? 0.0 : (tempY*PI*120.0);
+
+  RoboMotionC620.curSpeed.W  = ((0.3 * fabs(tempX) >= fabs(tempW)) || (0.3 * fabs(tempY) >= fabs(tempW))) ? 0.0 : (tempW*PI*120.0/195.0);
 }
 
 void Robot_Position_Update(float time)
 {
-  present.y += (RoboMotionC620.curSpeed.Vy * 0.04);
-  present.z += (RoboMotionC620.curSpeed.W * 0.04);
-  present.x += (RoboMotionC620.curSpeed.Vx * 0.04);
+  present.y += (RoboMotionC620.curSpeed.Vy * time);
+  present.z += (RoboMotionC620.curSpeed.W * time);
+  present.x += (RoboMotionC620.curSpeed.Vx * time);
 }
 
 
