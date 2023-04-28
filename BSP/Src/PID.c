@@ -117,7 +117,7 @@ float PIDCal_Fuzzy ( PIDType *PIDptr, float ThisError ) // 模糊增量式PID
   pError = ThisError - PIDptr->LastErr; 
   iError = ThisError;
   dError = ThisError - 2 * ( PIDptr->LastErr ) + PIDptr->PreErr;
-  /*********模糊控制************/
+
   
   qValue[0]=6.0*ThisError/(maximum-minimum);
   qValue[1]=3.0*pError/(maximum-minimum);
