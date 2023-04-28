@@ -11,6 +11,8 @@
 *   描述   : 初始化LED所用的IO口
 **********************************************************************************************************/
 
+int TIM5_num = 0;
+
 void LEDF_Init(void)
 {
   GPIO_InitTypeDef  GPIO_InitStructure;
@@ -133,4 +135,44 @@ void TIM4_init(void)
     
 	TIM_ARRPreloadConfig(TIM4, ENABLE);
 	TIM_Cmd(TIM4, ENABLE);
+}
+
+void TIM5_Init(u32 Period, u32 Prescaler){
+    //声明一个定时器结构体变量
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructrue;
+    //声明一个中断优先分组的结构体变量
+    NVIC_InitTypeDef NVIC_InitStructure;
+
+    //设置定时器中断的优先分组
+    NVIC_InitStructure.NVIC_IRQChannel=TIM5_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x03;   //抢占优先级为3
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x03;          //响应优先级为3
+    TIM_TimeBaseInitStructrue.TIM_Period=Period-1;     //Tout=(ARR+1)(PSC+1)/Tclk   
+    TIM_TimeBaseInitStructrue.TIM_Prescaler=Prescaler-1;
+    TIM_TimeBaseInitStructrue.TIM_CounterMode=TIM_CounterMode_Up;
+    TIM_TimeBaseInitStructrue.TIM_ClockDivision=TIM_CKD_DIV1;
+    //使能定时器3的外设时钟
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5,ENABLE);
+
+    //初始化定时器3
+    TIM_TimeBaseInit(TIM5,&TIM_TimeBaseInitStructrue);
+
+    //设置优先级分组  为组2
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+    //初始化优先级分组
+    NVIC_Init(&NVIC_InitStructure);
+    //配置定时器的中断的中断源
+    TIM_ITConfig(TIM3,TIM_IT_Update,ENABLE);
+    //使能定时器3
+    TIM_Cmd(TIM5,ENABLE);
+}
+
+void TIM5_IRQHandler(void)
+{
+    if(TIM_GetITStatus(TIM5,TIM_IT_Update)!=RESET)
+    {
+        TIM5_num++ ;
+        TIM_ClearITPendingBit(TIM5,TIM_IT_Update);
+    }
 }

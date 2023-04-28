@@ -217,8 +217,8 @@ static void TaskSpeedCtrl(void *p_arg)
     Motor_Speed_Ctrl_C620();
     Motor_Position_Ctrl();
     // 向C620电调发送期望电流值
-    SetMotor();
-    SetMotor_h();
+//    SetMotor();
+//    SetMotor_h();
 
     OSTimeDlyHMSM(0u, 0u, 0u, 5u, OS_OPT_TIME_HMSM_STRICT, &err);
   }
@@ -234,8 +234,8 @@ char flag_arbitraryPos = 0; // 设置位置环
 
 extern uint16_t CH[18]; // 通道值
 extern uint16_t CH_MEM[18];
-int preTick = 0;
-int Tick = 0;
+double preTick = 0;
+double Tick = 0;
 int speed_temp;
 double speed_mapping;
 int trigger_flag = 1, capture_flag = 1, release_flag = 1;
@@ -340,11 +340,17 @@ static void TaskBTcom(void *p_arg)
     {
       CH_MEM[i] = CH[i];
     }
+    
+    
     Tick = OSTimeGet(&err);
-    Robot_Position_Update((Tick-preTick)/1000);
     Robot_Speed_C620();
-    Position_PID(X, Y, W);
+    Robot_Position_Update((Tick-preTick)/18000.0);
+    //Robot_Position_Update(TIM_GetCounter(TIM5)/10000.0);
+    //Position_PID(X, Y, W);
+    Robot_Pos_Ctrl();
+    Robot_Speed_Ctrl();
     preTick = Tick;
+    TIM_SetCounter(TIM5, 0);
     OSTimeDlyHMSM(0u, 0u, 0u, 5u, OS_OPT_TIME_HMSM_STRICT, &err);
   }
 }

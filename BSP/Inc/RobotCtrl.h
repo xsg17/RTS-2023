@@ -256,7 +256,7 @@ void wheelVel_Limit (Motor_Data *wheel);
 double deadarea_jugde(float data, int benchmark, int range);
 void Robot_Speed_VESC();
 void Robot_Speed_C620();
-void Robot_Position_Update(float time);
+void Robot_Position_Update(double time);
 
 /*
 *********************************************************************************************************

@@ -19,8 +19,8 @@ extern Point error, present, target;
 extern Velocity world;
 extern volatile float target_position, current_position;
 
-PIDType X = {1.2,1, 0.7, 0, 0, 10, 0, 0};
-PIDType Y = {1.2,1, 0.7, 0, 0, 10, 0, 0};
+PIDType X = {1.2,1.2, 0.7, 0, 0, 1, 0, 0};
+PIDType Y = {1.2,1.2, 0.7, 0, 0, 1, 0, 0};
 PIDType W = {5,1, 0.7, 0, 0, 0.02, 0, 0};
 PIDType Stepper_Motor = {10, 4, 2, 0, 0, 0.2, 0};
 //                    Kp     Ki    Kd
@@ -203,6 +203,9 @@ float PIDCal_pos ( PIDType *PIDptr, float ThisError ) // 位置式PID
 //  {
 //    temp = temp *0.6;
 //  }
+  
+  
+  
   return temp;
 }
 
@@ -211,21 +214,20 @@ void Position_PID(PIDType PID_X, PIDType PID_Y, PIDType PID_Z)
   PID_Y.PreErr = target.y- present.y;
   PID_Z.PreErr = target.z- present.z;
   
-//  if((PID_X.SumErr > 50000) || (PID_Y.SumErr > 50000) || (PID_Z.SumErr > 50000))
-//  {
-//    PID_X.SumErr = PID_Y.SumErr =PID_Z.SumErr =50000;
-//  }
-
-  
-  if(PID_X.PreErr <= PID_X.delErr)
+  if(fabs(PID_X.PreErr) <= fabs(PID_X.delErr))
   {
     world.Vy = 0;
   }
   else
   {
-    if(PID_X.KP * PID_X.PreErr + PID_X.KI * PID_X.SumErr + PID_X.KD * (PID_X.PreErr - PID_X.LastErr) >= 500)
+    if(fabs(PID_X.KP * PID_X.PreErr + PID_X.KI * PID_X.SumErr + PID_X.KD * (PID_X.PreErr - PID_X.LastErr)) >= 2000)
     {
-      world.Vy = -500;
+      if(PID_X.PreErr > 0){
+        world.Vy = -2000;
+      }
+      else{
+        world.Vy = 2000;
+      }
     }
     else
     {
@@ -233,31 +235,43 @@ void Position_PID(PIDType PID_X, PIDType PID_Y, PIDType PID_Z)
     }
      
   }
-  if(PID_Y.PreErr <= PID_Y.delErr)
+  
+  
+  if(fabs(PID_Y.PreErr) <= fabs(PID_Y.delErr))
   {
     world.Vx = 0;
   }
   else
   {
-    if(PID_Y.KP * PID_Y.PreErr + PID_Y.KI * PID_Y.SumErr + PID_Y.KD * (PID_Y.PreErr - PID_Y.LastErr) >= 500)
-    {
-      world.Vx = 500;
+    if(fabs(PID_Y.KP * PID_Y.PreErr + PID_Y.KI * PID_Y.SumErr + PID_Y.KD * (PID_Y.PreErr - PID_Y.LastErr)) >= 2000){
+      if(PID_Y.PreErr > 0){
+        world.Vx = 2000;
+      }
+      else{
+        world.Vx = -2000;
+      }
     }
     else
     {
       world.Vx = PID_Y.KP * PID_Y.PreErr + PID_Y.KI * PID_Y.SumErr + PID_Y.KD * (PID_Y.PreErr - PID_Y.LastErr);
-    }
-     
+    } 
   }
-  if(PID_Z.PreErr <= PID_Z.delErr)
+  
+  
+  if(fabs(fabs(PID_Z.PreErr) <= fabs(PID_Z.delErr)))
   {
     world.W = 0;
   }
   else
   {
-    if(PID_Z.KP * PID_Z.PreErr + PID_Z.KI * PID_Z.SumErr + PID_Z.KD * (PID_Z.PreErr - PID_Z.LastErr) >=500)
+    if(PID_Z.KP * PID_Z.PreErr + PID_Z.KI * PID_Z.SumErr + PID_Z.KD * (PID_Z.PreErr - PID_Z.LastErr) >=2000)
     {
-      world.W = -500;
+      if(PID_Z.PreErr > 0){
+        world.W = -2000;
+      }
+      else{
+        world.W = 2000;
+      }
     }
     else
     {

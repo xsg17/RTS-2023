@@ -34,7 +34,7 @@ int Center_Wheel_Length;
 
 Motor_Data wheel[WHEELNUM + 1];
 //******************************************************************************
-int Speed_Limit = 3000; // 最大速度    3500，超调20cm，未加配重
+int Speed_Limit = 2000; // 最大速度    3500，超调20cm，未加配重
                                   //   3500，超调11cm,加配重
                                   //   4000，超调24cm，加配重
                                   //   4500，超调55cm，加配重
@@ -246,8 +246,17 @@ void Robot_Pos_Ctrl (void)
 {
 //  static float recVx = 0,recVy = 0;
 //  float jiasudu_x,jiasudu_y;
-  RoboMotion.expSpeed.Vx = PIDCal_pos(&posxPID, RobotExpPos.pos_x - RobotPos.pos_x);
-  RoboMotion.expSpeed.Vy = PIDCal_pos(&posyPID, RobotExpPos.pos_y - RobotPos.pos_y);
+  
+  
+  
+//  RoboMotion.expSpeed.Vx = PIDCal_pos(&posxPID, RobotExpPos.pos_x - RobotPos.pos_x);
+//  RoboMotion.expSpeed.Vy = PIDCal_pos(&posyPID, RobotExpPos.pos_y - RobotPos.pos_y);
+  
+  
+  RoboMotion.expSpeed.Vx = PIDCal_pos(&posxPID, present.x - target.x);
+  RoboMotion.expSpeed.Vy = PIDCal_pos(&posyPID, present.y - target.y);
+  
+  
 //  if(RoboMotion.expSpeed.Vx < 0 || RoboMotion.expSpeed.Vy < 0)
 //  {
 //  if(RoboMotion.expSpeed.Vx > recVx || RoboMotion.expSpeed.Vy > recVy)
@@ -276,9 +285,9 @@ void Robot_Pos_Ctrl (void)
     RoboMotion.expSpeed.Vx = -Speed_Limit;
   }
 
-  if(RoboMotion.expSpeed.Vy > Speed_Limit)
+  if(RoboMotion.expSpeed.Vy  > Speed_Limit)
   {
-    RoboMotion.expSpeed.Vy = Speed_Limit;
+    RoboMotion.expSpeed.Vy  = Speed_Limit;
   }
   else if(RoboMotion.expSpeed.Vy < -Speed_Limit)
   {
@@ -294,8 +303,6 @@ void Robot_Pos_Ctrl (void)
     RoboMotion.expSpeed.W = -Theta_Limit;
   }
 
-//  recVx = RoboMotion.expSpeed.Vx;
-//  recVy = RoboMotion.expSpeed.Vy;
 }
 
 
@@ -315,27 +322,27 @@ void Robot_Pos_Ctrl (void)
 int os = 0;
 void Robot_Speed_Ctrl (void)                           //分段式PID控制
 {
-  RoboMotion.outSpeed.Vx = -RoboMotion.expSpeed.Vx;
-  RoboMotion.outSpeed.Vy = -RoboMotion.expSpeed.Vy;
-  RoboMotion.outSpeed.W = 0;  // 更新一版，每次算完都清零，近似位置式pid算法，可以达成目标，速度较为震动，参数可调
+  world.Vy = -RoboMotion.expSpeed.Vx;
+  world.Vx = -RoboMotion.expSpeed.Vy;
+  world.W = 0;  // 更新一版，每次算完都清零，近似位置式pid算法，可以达成目标，速度较为震动，参数可调
   
-  if( abs(RobotPos.theta) <= PI*10/180.0)     //角度PID——小误差（误差范围在15°以内）
-  {
-    RoboMotion.outSpeed.W += PIDCal( &ThetaPID2, ( RoboMotion.expPos.z - RobotPos.theta ) ) * 10 ;
-  }
-  else                                       //大误差
-  {
-    RoboMotion.outSpeed.W += PIDCal( &ThetaPID1, ( RoboMotion.expPos.z - RobotPos.theta ) ) * 15 ; // 8
-  }
-  
+//  if( abs(RobotPos.theta) <= PI*10/180.0)     //角度PID——小误差（误差范围在15°以内）
+//  {
+//    world.W += PIDCal( &ThetaPID2, ( RoboMotion.expPos.z - RobotPos.theta ) ) * 10 ;
+//  }
+//  else                                       //大误差
+//  {
+//    world.W += PIDCal( &ThetaPID1, ( RoboMotion.expPos.z - RobotPos.theta ) ) * 15 ; // 8
+//  }
+//  
   if( abs(RoboMotion.expSpeed.Vx) <= 200 )     //x小
   {
-    RoboMotion.outSpeed.Vx -= PIDCal( &VelxPID2, RoboMotion.expSpeed.Vx - RoboMotion.curSpeed.Vx );
+    world.Vy = PIDCal( &VelxPID2, RoboMotion.expSpeed.Vx - RoboMotionC620.curSpeed.Vy );
   }
   else                                          //x大
   {
-    RoboMotion.outSpeed.Vx -= PIDCal( &VelxPID1, RoboMotion.expSpeed.Vx - RoboMotion.curSpeed.Vx );
-    if( abs(RoboMotion.expSpeed.Vx) <= abs(RoboMotion.curSpeed.Vx) )
+    world.Vy = PIDCal( &VelxPID1, RoboMotion.expSpeed.Vx - RoboMotionC620.curSpeed.Vy );
+    if( abs(RoboMotion.expSpeed.Vx) <= abs(RoboMotionC620.curSpeed.Vy))
     {
      // RoboMotion.outSpeed.Vx = RoboMotion.outSpeed.Vx * 1.2;
     }
@@ -344,45 +351,45 @@ void Robot_Speed_Ctrl (void)                           //分段式PID控制
   
   if( abs(RoboMotion.expSpeed.Vy) <= 200 )     //y小
   {
-    RoboMotion.outSpeed.Vy -= PIDCal( &VelyPID2, RoboMotion.expSpeed.Vy - RoboMotion.curSpeed.Vy );
+    world.Vx = PIDCal( &VelyPID2, RoboMotion.expSpeed.Vy - RoboMotionC620.curSpeed.Vx );
   }
   else                                        //y大
   {
-    RoboMotion.outSpeed.Vy -= PIDCal( &VelyPID1, RoboMotion.expSpeed.Vy - RoboMotion.curSpeed.Vy );
-    if( abs(RoboMotion.expSpeed.Vy) <= abs(RoboMotion.curSpeed.Vy) )
+    world.Vx = PIDCal( &VelyPID1, RoboMotion.expSpeed.Vy - RoboMotionC620.curSpeed.Vx );
+    if( abs(RoboMotion.expSpeed.Vy) <= abs(RoboMotionC620.curSpeed.Vx) )
     {
     //  RoboMotion.outSpeed.Vy = RoboMotion.outSpeed.Vy * 1.2;
     }
   }
   
-  if( flag_brake == 1 )
-      RoboMotion.outSpeed.Vx =  RoboMotion.outSpeed.Vy = RoboMotion.outSpeed.W = 0; // 急停
+//  if( flag_brake == 1 )
+//      world.Vy =  world.Vx = world.W = 0; // 急停
   
-  if( RoboMotion.outSpeed.Vx >= 15000 )
+  if( world.Vy >= 15000 )
   {
-    RoboMotion.outSpeed.Vx = 15000;
+    world.Vy = 15000;
   }
-  if( RoboMotion.outSpeed.Vx <= -15000 )
+  if( world.Vy <= -15000 )
   {
-    RoboMotion.outSpeed.Vx = -15000;
-  }
-  
-  if( RoboMotion.outSpeed.Vy >= 15000 )
-  {
-    RoboMotion.outSpeed.Vy = 15000;
-  }
-  if( RoboMotion.outSpeed.Vy <= -15000 )
-  {
-    RoboMotion.outSpeed.Vy = -15000;
+    world.Vy = -15000;
   }
   
-   if( RoboMotion.outSpeed.W >= 3000 )
+  if( world.Vx >= 15000 )
   {
-    RoboMotion.outSpeed.W = 3000;
+    world.Vx = 15000;
   }
-  if( RoboMotion.outSpeed.W <= -3000 )
+  if( world.Vx <= -15000 )
   {
-    RoboMotion.outSpeed.W = -3000;
+    world.Vx = -15000;
+  }
+  
+   if( world.W >= 3000 )
+  {
+    world.W = 3000;
+  }
+  if( world.W <= -3000 )
+  {
+    world.W = -3000;
   }
   
 }
@@ -456,11 +463,11 @@ void Robot_Speed_C620()
 //  RoboMotionC620.curSpeed.Vx = ((0.3 * fabs(tempX) >= fabs(tempY)) || (0.3 * fabs(tempW) >= fabs(tempY))) ? 0.0 : (tempY*PI*120.0/60.0);
 //  RoboMotionC620.curSpeed.W  = ((0.3 * fabs(tempX) >= fabs(tempW)) || (0.3 * fabs(tempY) >= fabs(tempW))) ? 0.0 : (tempW*PI*120.0/200.0/60.0);
 
-  tempX = (MOTOR[1].CurSpeed-MOTOR[2].CurSpeed)/2.0;
+  tempX = (MOTOR[1].CurSpeed-MOTOR[2].CurSpeed)/120.0;
   
-  tempY = (MOTOR[1].CurSpeed+MOTOR[2].CurSpeed-MOTOR[3].CurSpeed-MOTOR[4].CurSpeed)/4.0;  
+  tempY = (MOTOR[1].CurSpeed+MOTOR[2].CurSpeed-MOTOR[3].CurSpeed-MOTOR[4].CurSpeed)/240.0;  
   
-  tempW= (MOTOR[1].CurSpeed+MOTOR[2].CurSpeed+MOTOR[3].CurSpeed+MOTOR[4].CurSpeed)/4.0;
+  tempW= (MOTOR[1].CurSpeed+MOTOR[2].CurSpeed+MOTOR[3].CurSpeed+MOTOR[4].CurSpeed)/240.0;
   
   RoboMotionC620.curSpeed.Vy = ((0.3 * fabs(tempY) >= fabs(tempX)) || (0.3 * fabs(tempW) >= fabs(tempX))) ? 0.0 : (tempX*PI*120.0);
 
@@ -469,7 +476,7 @@ void Robot_Speed_C620()
   RoboMotionC620.curSpeed.W  = ((0.3 * fabs(tempX) >= fabs(tempW)) || (0.3 * fabs(tempY) >= fabs(tempW))) ? 0.0 : (tempW*PI*120.0/195.0);
 }
 
-void Robot_Position_Update(float time)
+void Robot_Position_Update(double time)
 {
   present.y += (RoboMotionC620.curSpeed.Vy * time);
   present.z += (RoboMotionC620.curSpeed.W * time);

@@ -182,11 +182,9 @@ void  BSP_Init (void)
   LED2_Init();
   power_init();
   SBUS_init();
-//  BEEP_Init();
-    LoRa_Init();
-   //TIM3_Init();
-//  RELAY_Init();
-  // LEDF_Init();
+
+  LoRa_Init();
+  TIM5_Init(100,8400);//84MHz/(84)/(100) = 10KHz  ->  10000 time 1 second
   BSP_OSTickInit(); // Initialize OS periodic time source  
 }
 
