@@ -341,9 +341,9 @@ void SetMotor_h_C610(void) // 发高八位数据时使用
 
 int32_t initparg_2006 = 0;        // 2006初始角度为0,夹取机构处于闭合状态
 int32_t initparg_3508 = 0;        // 3508初始角度为0，夹取机构处于闭合状态
-int32_t openparg_2006 = 25000;    // 2006打开角度，夹环准备(25000)
-int32_t overparg_3508 = -42000;   // 3508转动180，放环准备(-60000)
-int32_t claparg_2006 = 1000;      // 2006夹环角度,根据环的个数进行调整(1000)
+int32_t openparg_2006 = 65000;    // 2006打开角度，夹环准备(25000)
+int32_t overparg_3508 = -65000;   // 3508转动180，放环准备(-60000)
+int32_t claparg_2006 = 3000;      // 2006夹环角度,根据环的个数进行调整(1000)
 int32_t releaseparg_2006 = 45000; // 2006放环角度(53000)
 
 int Capstep = 0; // 抓取步骤
@@ -360,7 +360,7 @@ void Pre_capture(void) // 夹环准备，打开之后向前怼一段距离，将
 void Capture(void) // 抓取
 {
   Capstep = 0;            // 抓取步骤
-  MOTOR[5].Expvel = 1500; // 3508电机速度
+  MOTOR[5].Expvel = 1000; // 3508电机速度
   MOTOR[6].Expvel = 5000; // 2006电机速度
   while (Capstep < 3)
   {
@@ -394,7 +394,7 @@ void Capture(void) // 抓取
 
 void Re_capture(void) // 环发射完成后，状态复原
 {
-  MOTOR[5].Expvel = 2000;
+  MOTOR[5].Expvel = 1000;
   MOTOR[6].Expvel = 5000; // 2006电机速度
   Capstep = 0;
   while (Capstep < 3)

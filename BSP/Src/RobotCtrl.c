@@ -255,6 +255,7 @@ void Robot_Pos_Ctrl (void)
   
   RoboMotion.expSpeed.Vx = PIDCal_pos(&posxPID, present.x - target.x);
   RoboMotion.expSpeed.Vy = PIDCal_pos(&posyPID, present.y - target.y);
+  RoboMotion.expSpeed.W = PIDCal_pos(&posyPID, present.z - target.z);
   
   
 //  if(RoboMotion.expSpeed.Vx < 0 || RoboMotion.expSpeed.Vy < 0)
@@ -324,7 +325,7 @@ void Robot_Speed_Ctrl (void)                           //分段式PID控制
 {
   world.Vy = -RoboMotion.expSpeed.Vx;
   world.Vx = -RoboMotion.expSpeed.Vy;
-  world.W = 0;  // 更新一版，每次算完都清零，近似位置式pid算法，可以达成目标，速度较为震动，参数可调
+  world.W  = -RoboMotion.expSpeed.W;  // 更新一版，每次算完都清零，近似位置式pid算法，可以达成目标，速度较为震动，参数可调
   
 //  if( abs(RobotPos.theta) <= PI*10/180.0)     //角度PID——小误差（误差范围在15°以内）
 //  {
@@ -362,25 +363,39 @@ void Robot_Speed_Ctrl (void)                           //分段式PID控制
     }
   }
   
+  
+  if( abs(RoboMotion.expSpeed.W) <= 200 )     //y小
+  {
+    world.W = PIDCal( &VelyPID2, RoboMotion.expSpeed.W - RoboMotionC620.curSpeed.W );
+  }
+  else                                        //y大
+  {
+    world.W = PIDCal( &VelyPID1, RoboMotion.expSpeed.W - RoboMotionC620.curSpeed.W );
+    if( abs(RoboMotion.expSpeed.Vy) <= abs(RoboMotionC620.curSpeed.Vx) )
+    {
+    //  RoboMotion.outSpeed.Vy = RoboMotion.outSpeed.Vy * 1.2;
+    }
+  }
+  
 //  if( flag_brake == 1 )
 //      world.Vy =  world.Vx = world.W = 0; // 急停
   
-  if( world.Vy >= 15000 )
+  if( world.Vy >= 1500 )
   {
-    world.Vy = 15000;
+    world.Vy = 1500;
   }
-  if( world.Vy <= -15000 )
+  if( world.Vy <= -1500 )
   {
-    world.Vy = -15000;
+    world.Vy = -1500;
   }
   
-  if( world.Vx >= 15000 )
+  if( world.Vx >= 1500 )
   {
-    world.Vx = 15000;
+    world.Vx = 1500;
   }
-  if( world.Vx <= -15000 )
+  if( world.Vx <= -1500 )
   {
-    world.Vx = -15000;
+    world.Vx = -1500;
   }
   
    if( world.W >= 3000 )

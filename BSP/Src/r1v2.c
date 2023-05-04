@@ -1,7 +1,7 @@
 #define  R1V2_MODULE
 #include "r1v2.h"
 
-uint8_t R1V2_RX_BUF[26];
+uint8_t R1V2_RX_BUF[34];
 uint16_t CH[18];  // 通道值
 uint16_t CH_MEM[18];
 uint8_t rc_flag = 0;

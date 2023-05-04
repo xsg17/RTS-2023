@@ -56,7 +56,7 @@ void SBUS_init (void);
 void USART1_IRQHandler(void);
 void R1V2_Data_Count(uint8_t *buf);
 
-extern uint8_t R1V2_RX_BUF[26];
+extern uint8_t R1V2_RX_BUF[34];
 extern uint16_t CH[18];  // 通道值
 extern uint16_t CH_MEM[18];
 extern uint8_t  rc_flag;

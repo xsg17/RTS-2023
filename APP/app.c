@@ -71,6 +71,7 @@ static void TaskBTcom(void *p_arg);
 
 extern PIDType X, Y, W;
 
+
 int main() // 主函数
 {
   
@@ -211,14 +212,14 @@ static void TaskSpeedCtrl(void *p_arg)
   {
 
     Sendwheel_Vel(); // 5,6,7,8速度环以及数据发送
-    //    Motor_Speed_Ctrl_C610();
-    //    Motor_Position_Ctrl_C610();
-    //    SetMotor_C610();
+        Motor_Speed_Ctrl_C610();
+        Motor_Position_Ctrl_C610();
+        SetMotor_C610();
     Motor_Speed_Ctrl_C620();
     Motor_Position_Ctrl();
     // 向C620电调发送期望电流值
-//    SetMotor();
-//    SetMotor_h();
+    SetMotor();
+    SetMotor_h();
 
     OSTimeDlyHMSM(0u, 0u, 0u, 5u, OS_OPT_TIME_HMSM_STRICT, &err);
   }
@@ -238,7 +239,7 @@ double preTick = 0;
 double Tick = 0;
 int speed_temp;
 double speed_mapping;
-int trigger_flag = 1, capture_flag = 1, release_flag = 1;
+int trigger_flag = 1, capture_flag = 1, release_flag = 1, switch_flag = 0;
 static void TaskBTcom(void *p_arg)
 {
   OS_ERR err;
@@ -253,81 +254,73 @@ static void TaskBTcom(void *p_arg)
   while (1)
   { /////////////////底盘移动部分///////////////////////////////
 
-    if ((Pulley1 != Pulley1_MEM) || (abs(Pulley1 - Pulley1_MEM) >= 5)) // 速度映射
+    if ((LS != LS_MEM) || (abs(LS - LS_MEM) >= 5)) // 速度映射
     {
-      speed_mapping = Pulley1 / 150.0;
+      speed_mapping = (LS - 353.0) / 1343.0 * 3.0;
     }
 
     if (RockerR_Horizontal != RockerR_Horizontal_MEM) // 右摇杆水平移动->机器人平移
     {
-      world.Vx = deadarea_jugde(RockerR_Horizontal, 974, 150) * speed_mapping;
+      world.Vx = deadarea_jugde(RockerR_Horizontal, 1024, 150) * speed_mapping;
     }
 
     if (RockerL_Horizontal != RockerL_Horizontal_MEM) // 左摇杆水平移动->机器人旋转
     {
-      world.W = -1 * deadarea_jugde(RockerL_Horizontal, 990, 150) * speed_mapping / 20;
+      world.W = -1 * deadarea_jugde(RockerL_Horizontal, 1024, 150) * speed_mapping / 20;
     }
 
     if (RockerR_Vertical != RockerR_Vertical_MEM) // 右摇杆竖直移动->机器人前进
     {
-      world.Vy = deadarea_jugde(RockerR_Vertical, 987, 150) * speed_mapping;
+      world.Vy = deadarea_jugde(RockerR_Vertical, 1024, 150) * speed_mapping;
     }
-    if (button1 > 1000)
+    if (SH > 1000)
     {
       if (trigger_flag)
       {
         MOTOR[7].Expvel = 6000;
         MOTOR[7].Exparg += 157293.5; // 一圈
         trigger_flag = 0;
-        //Pre_capture();
       }
     }
     else
     {
       trigger_flag = 1;
     }
-    if (button2 > 1000)
+    if ((SF >= (SF_MEM + 400)) || (SF <= (SF_MEM - 400)))
     {
-      if (capture_flag)
+      if (capture_flag && (!switch_flag))
       {
         Capture();
         capture_flag = 0;
+        release_flag = 1;
+        switch_flag = !switch_flag; 
+      }
+      else if(release_flag && switch_flag)
+      {
+          Re_capture();
+          release_flag = 0;
+          capture_flag = 1;
+          switch_flag = !switch_flag;
       }
     }
     else
     {
       capture_flag = 1;
-    }
-
-    if (button3 > 1000)
-    {
-      if (release_flag)
-      {
-        Re_capture();
-        release_flag = 0;
-      }
-    }
-    else
-    {
       release_flag = 1;
     }
-
-    if (button4 > 1000)
+    
+    if(RS != RS_MEM)
     {
-    }
-
-    if(Pulley2 != Pulley2_MEM)
-    {
-      Mt = get_position((Pulley2-200.0)/200.0 + 31.0);
+      Mt = get_position((RS-200.0)/200.0 + 31.0);
       stepper_motor_run(Mt - current_position);
     }
-    if(switchL != switchL_MEM)
+    if(SB != SB_MEM)
     {
-      if (switchL >= 1200){
+      if (SB >= 1200){
         SetMotor_speed_VESC(1,0);
         SetMotor_speed_VESC(2,0);
       }
-      else if (switchL <= 500){
+      else if (SB <= 500){
         SetMotor_speed_VESC(1,500);
         SetMotor_speed_VESC(2,500);
       }
@@ -343,14 +336,14 @@ static void TaskBTcom(void *p_arg)
     
     
     Tick = OSTimeGet(&err);
-    Robot_Speed_C620();
+//    Robot_Speed_C620();
     Robot_Position_Update((Tick-preTick)/18000.0);
     //Robot_Position_Update(TIM_GetCounter(TIM5)/10000.0);
     //Position_PID(X, Y, W);
     Robot_Pos_Ctrl();
     Robot_Speed_Ctrl();
     preTick = Tick;
-    TIM_SetCounter(TIM5, 0);
+//    TIM_SetCounter(TIM5, 0);
     OSTimeDlyHMSM(0u, 0u, 0u, 5u, OS_OPT_TIME_HMSM_STRICT, &err);
   }
 }

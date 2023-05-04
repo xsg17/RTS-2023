@@ -38,8 +38,8 @@ PIDType MotorPID3 = {0.10, 0.10, 0, 0, 0, 0, 0};
 PIDType MotorPID4 = {0.10, 0.10, 0, 0, 0, 0, 0};
 
 PIDType MotorPID5 = {0.10, 0.10, 0, 0, 0, 0, 0};
-PIDType MotorPID6 = {0.3, 0.10, 0, 0, 0, 0, 0};
-PIDType MotorPID7 = {0.10, 0.10, 0, 0, 0, 0, 0};
+PIDType MotorPID6 = {0.2, 0.10, 0, 0, 0, 0, 0};
+PIDType MotorPID7 = {0.05, 0.10, 0.2, 0, 0, 0, 0};
 PIDType MotorPID8 = {0.10, 0.10, 0, 0, 0, 0, 0};
 // PIDType MotorPID5 =  {10, 0.25,   0,0,0,15,0};
 // PIDType MotorPID6 =  {10, 0.25,   0,0,0,15,0};
@@ -208,7 +208,7 @@ void Motor_Position_Ctrl(void)
   //   MOTOR[4].ExpSpeed = -1.05 * MOTOR[4].Expvel;
   // }
 
-  if (abs(MOTOR[5].Exparg - MOTOR[5].Temparg) < 11000)
+  if (abs(MOTOR[5].Exparg - MOTOR[5].Temparg) < 20000)
   {
     MOTOR[5].ExpSpeed = PIDCal(&MotorPID5, MOTOR[5].Exparg - MOTOR[5].Temparg);
   }
@@ -221,7 +221,7 @@ void Motor_Position_Ctrl(void)
     MOTOR[5].ExpSpeed = -1.05 * MOTOR[5].Expvel;
   }
 
-  if (abs(MOTOR[6].Exparg - MOTOR[6].Temparg) < 11000)
+  if (abs(MOTOR[6].Exparg - MOTOR[6].Temparg) < 20000)
   {
     MOTOR[6].ExpSpeed = PIDCal(&MotorPID6, MOTOR[6].Exparg - MOTOR[6].Temparg);
   }
@@ -234,7 +234,7 @@ void Motor_Position_Ctrl(void)
     MOTOR[6].ExpSpeed = -1.05 * MOTOR[6].Expvel;
   }
 
-  if (abs(MOTOR[7].Exparg - MOTOR[7].Temparg) < 11000)
+  if (abs(MOTOR[7].Exparg - MOTOR[7].Temparg) < 20000)
   {
     MOTOR[7].ExpSpeed = PIDCal(&MotorPID7, MOTOR[7].Exparg - MOTOR[7].Temparg);
   }
