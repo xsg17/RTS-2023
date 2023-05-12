@@ -51,6 +51,10 @@
 #define GEAR_RATIO      (1.0/1.0)
 
 
+#define YES 1
+#define NO  0
+
+
 
 /*
 *********************************************************************************************************
@@ -66,6 +70,14 @@ typedef struct
   float z; // degree
   
 }Point;
+
+typedef struct   //Ax + BY + C = 0
+{
+  float A;
+  float B;
+  float C;
+}Line;
+
 
 typedef struct
 {
@@ -103,8 +115,20 @@ typedef struct
   float yangle; // degree
   float w_z;
   float theta; // rad
-  
+  float Vx;
+  float Vy;
 }POSE;
+
+typedef struct
+{
+  float pos_x[100]; // mm
+  float pos_y[100]; // mm
+  float theta[100]; // rad
+  float W[100];
+  float V[100];
+  float Vdirection[100];
+}POSE_SET;
+
 
 // Laser pos
 typedef struct
@@ -251,12 +275,13 @@ void Chassis_Init (void);
 void SpeedCtrl (void);
 void SendWheel_Vel (void);
 void Send_Velocity (Motor_Data *wheel);
-void Formula_4Omni (Motor_Data *wheel, Velocity *robo);
+void Formula_4Omni(Motor_Data *wheel, Velocity *robo);
 void wheelVel_Limit (Motor_Data *wheel);
 double deadarea_jugde(float data, int benchmark, int range);
 void Robot_Speed_VESC();
 void Robot_Speed_C620();
 void Robot_Position_Update(double time);
+void Navigation(POSE_SET navigation);
 
 /*
 *********************************************************************************************************
@@ -266,3 +291,4 @@ void Robot_Position_Update(double time);
 
 extern int Speed_Limit; // ����ٶ�
 extern char flag_brake;
+extern POSE_SET Navigation_Set;

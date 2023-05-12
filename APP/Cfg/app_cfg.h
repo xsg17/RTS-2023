@@ -44,11 +44,11 @@
 
 #define	 TASK_LED_STK_SIZE						128u
 
-#define  TASK_START_STK_SIZE           			256u
+#define  TASK_START_STK_SIZE           			512u
 #define  TASK_PATHTRACK_STK_SIZE           		256u
 #define  TASK_SPEEDCTRL_STK_SIZE           		512u
 #define	 TASK_ACT_STK_SIZE						256u
-#define	 TASK_BTCOM_STK_SIZE					256u
+#define	 TASK_BTCOM_STK_SIZE					512u
 #define	 TASK_RELAY_STK_SIZE					256u
 #define	 TASK_DJ_STK_SIZE					    256u
 

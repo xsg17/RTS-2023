@@ -12,7 +12,7 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <DebugChecksum>
-        <Checksum>1730419389</Checksum>
+        <Checksum>4115584812</Checksum>
     </DebugChecksum>
     <CodeCoverage>
         <Enabled>_ 0</Enabled>
@@ -65,6 +65,19 @@
         <ITMportsLogFile>0</ITMportsLogFile>
         <ITMlogFile>$PROJ_DIR$\ITM.log</ITMlogFile>
     </SWOTraceHWSettings>
+    <PlDriver>
+        <MemConfigValue>D:\Kipper\software\IAR\arm\CONFIG\debugger\ST\STM32F427II.ddf</MemConfigValue>
+    </PlDriver>
+    <Jet>
+        <JetConnSerialNo>ATK-HSWL-CMSIS-DAP:ATK 20190528</JetConnSerialNo>
+        <JetConnFoundProbes />
+        <DisableInterrupts>0</DisableInterrupts>
+        <LeaveRunning>0</LeaveRunning>
+        <MultiCoreRunAll>0</MultiCoreRunAll>
+    </Jet>
+    <ArmDriver>
+        <EnableCache>1</EnableCache>
+    </ArmDriver>
     <array_types>
         <Fmt0>uint16_t[200]	4	0</Fmt0>
         <Fmt1>uint8_t[26]	4	0</Fmt1>
@@ -137,7 +150,8 @@
     <Breakpoints2>
         <Bp0>_ 0 "EMUL_DATA" "curSpeed" 0 0 0 0 4294967295</Bp0>
         <Bp1>_ 0 "EMUL_DATA" "BSP_OS_TickGet" 0 0 0 0 4294967295</Bp1>
-        <Count>2</Count>
+        <Bp2>_ 0 "EMUL_DATA" "TASK_BTCOM_STK_SIZE" 0 0 0 0 4294967295</Bp2>
+        <Count>3</Count>
     </Breakpoints2>
     <TermIOLog>
         <LoggingEnabled>_ 0</LoggingEnabled>
@@ -160,21 +174,22 @@
         <A8>_ "C:\Users\User\Desktop\修改版\修改版\BSP\Src\RobotCtrl.c" ""</A8>
         <A9>_ "C:\Users\User\Desktop\修改版改\修改版\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_can.c" ""</A9>
         <A10>_ "C:\Users\User\Desktop\修改版改\修改版\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_it.c" ""</A10>
-        <A11>_ "C:\Users\User\Desktop\修改版改\修改版\UCOS\uCOS-III\Source\os_core.c" ""</A11>
-        <A12>_ "D:\OneDrive - 30xn56\桌面\Robocon_A\APP\app.c" "D:\编程无需同步\M3508电机测试\Robocon_A\APP\app.c"</A12>
-        <A13>_ "E:\STM32\Robocon_A\BSP\Src\C620.c" "D:\编程无需同步\M3508电机测试\Robocon_A\BSP\Src\C620.c"</A13>
-        <A14>_ "E:\STM32\Robocon_A\BSP\Src\bsp.c" "D:\OneDrive - 30xn56\桌面\Robocon_A\BSP\Src\bsp.c"</A14>
-        <A15>_ "E:\STM32\Robocon_A\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_can.c" "E:\window\M3508电机测试\M3508电机测试\Robocon_A\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_can.c"</A15>
-        <A16>_ "E:\STM32\Robocon_A\UCOS\uCOS-III\Source\os_core.c" "E:\window\M3508电机测试\M3508电机测试\Robocon_A\UCOS\uCOS-III\Source\os_core.c"</A16>
-        <A17>_ "E:\STM32\Robocon_A\UCOS\uCOS-III\Source\os_flag.c" "E:\window\M3508电机测试\M3508电机测试\Robocon_A\UCOS\uCOS-III\Source\os_flag.c"</A17>
-        <A18>_ "E:\STM32\机器人\Robocon_code\Robocon2021_二车\上层\BSP\Src\PID.c" ""</A18>
-        <A19>_ "E:\STM32\机器人\Robocon_code\Robocon2021_二车\上层\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_tim.c" ""</A19>
-        <A20>_ "E:\STM32\机器人\Robocon_code\Robocon2021_二车\上层\UCOS\uC-CPU\ARM-Cortex-M4\cpu_a.asm" ""</A20>
-        <A21>_ "E:\STM32\机器人\Robocon_code\Robocon2021_二车\上层\UCOS\uCOS-III\Ports\os_cpu_a.asm" "E:\window\M3508电机测试\M3508电机测试\Robocon_A\UCOS\uCOS-III\Ports\os_cpu_a.asm"</A21>
-        <A22>_ "E:\STM32\机器人\Robocon_code\Robocon2021_二车\上层\UCOS\uCOS-III\Source\os_core.c" ""</A22>
-        <A23>_ "c:\Users\Raden\Desktop\RTS2023-main\APP\app.c" ""</A23>
-        <A24>_ "c:\Users\Raden\Desktop\RTS2023-main\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_it.c" ""</A24>
-        <Count>25</Count>
+        <A11>_ "C:\Users\User\Desktop\修改版改\修改版\UCOS\uC-CPU\cpu_core.c" ""</A11>
+        <A12>_ "C:\Users\User\Desktop\修改版改\修改版\UCOS\uCOS-III\Source\os_core.c" ""</A12>
+        <A13>_ "D:\OneDrive - 30xn56\桌面\Robocon_A\APP\app.c" "D:\编程无需同步\M3508电机测试\Robocon_A\APP\app.c"</A13>
+        <A14>_ "E:\STM32\Robocon_A\BSP\Src\C620.c" "D:\编程无需同步\M3508电机测试\Robocon_A\BSP\Src\C620.c"</A14>
+        <A15>_ "E:\STM32\Robocon_A\BSP\Src\bsp.c" "D:\OneDrive - 30xn56\桌面\Robocon_A\BSP\Src\bsp.c"</A15>
+        <A16>_ "E:\STM32\Robocon_A\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_can.c" "E:\window\M3508电机测试\M3508电机测试\Robocon_A\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_can.c"</A16>
+        <A17>_ "E:\STM32\Robocon_A\UCOS\uCOS-III\Source\os_core.c" "E:\window\M3508电机测试\M3508电机测试\Robocon_A\UCOS\uCOS-III\Source\os_core.c"</A17>
+        <A18>_ "E:\STM32\Robocon_A\UCOS\uCOS-III\Source\os_flag.c" "E:\window\M3508电机测试\M3508电机测试\Robocon_A\UCOS\uCOS-III\Source\os_flag.c"</A18>
+        <A19>_ "E:\STM32\机器人\Robocon_code\Robocon2021_二车\上层\BSP\Src\PID.c" ""</A19>
+        <A20>_ "E:\STM32\机器人\Robocon_code\Robocon2021_二车\上层\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_tim.c" ""</A20>
+        <A21>_ "E:\STM32\机器人\Robocon_code\Robocon2021_二车\上层\UCOS\uC-CPU\ARM-Cortex-M4\cpu_a.asm" ""</A21>
+        <A22>_ "E:\STM32\机器人\Robocon_code\Robocon2021_二车\上层\UCOS\uCOS-III\Ports\os_cpu_a.asm" "E:\window\M3508电机测试\M3508电机测试\Robocon_A\UCOS\uCOS-III\Ports\os_cpu_a.asm"</A22>
+        <A23>_ "E:\STM32\机器人\Robocon_code\Robocon2021_二车\上层\UCOS\uCOS-III\Source\os_core.c" ""</A23>
+        <A24>_ "c:\Users\Raden\Desktop\RTS2023-main\APP\app.c" ""</A24>
+        <A25>_ "c:\Users\Raden\Desktop\RTS2023-main\Driver\STM32F4xx_Std_Lib\Src\stm32f4xx_it.c" ""</A25>
+        <Count>26</Count>
         <SuppressDialog>0</SuppressDialog>
     </Aliases>
     <DriverProfiling>

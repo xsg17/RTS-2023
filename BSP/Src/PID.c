@@ -14,15 +14,23 @@
 *                                               CONSTANTS
 *********************************************************************************************************
 */
+#ifndef E
+#define E 2.7182818284f
+#endif
+
 
 extern Point error, present, target;
 extern Velocity world;
 extern volatile float target_position, current_position;
 
-PIDType X = {1.2,1.2, 0.7, 0, 0, 1, 0, 0};
-PIDType Y = {1.2,1.2, 0.7, 0, 0, 1, 0, 0};
-PIDType W = {5,1, 0.7, 0, 0, 0.02, 0, 0};
+PIDType X = {1.2,1.0, 0.7, 0, 0, 5, 0, 0};
+PIDType Y = {1.2,1, 0.7, 0, 0, 5, 0, 0};
+PIDType W = {5,1, 0.7, 0, 0, 2000, 0, 0};
 PIDType Stepper_Motor = {10, 4, 2, 0, 0, 0.2, 0};
+
+PIDType NavigationPID = {1.7, 1, 0.5, 0, 0, 50, 0};
+PIDType NavigationWPID = {1, 0.7, 0.5, 0, 0, 50, 0};
+PIDType NavigationTPID = {1, 0.7, 0.5, 0, 0, 50, 0};
 //                    Kp     Ki    Kd
 //底盘PID参数 1 速度 3000
 PIDType VelxPID1  = { 1.055, 3.425, 0  , 0, 0, 0, 0  }; // <----------> X USE THIS PID PARAMETER
@@ -37,9 +45,9 @@ PIDType ThetaPID2 = { 1.00 , 0.70, 1.0, 0, 0, 0, 0  }; // <----------> Z USE THI
 //PIDType Velx_1PID = { 2.8, 0.10, 0, 0, 0, 0, 0 };
 //PIDType Vely_1PID = { 2.20, 0.05, 0, 0, 0, 0, 0 };
 // 位置PID参数
-PIDType posxPID = {1.7, 0.6, 0.5, 0, 0, 0, 0};
-PIDType posyPID = {1.7, 0.6, 0.5, 0, 0, 0, 0};//300,450,900,990      原始:1.5 0.6
-
+PIDType posxPID = {1.7, 0.6, 0.5, 0, 0, 10, 0, 0};
+PIDType posyPID = {1.7, 0.6, 0.5, 0, 0, 10, 0, 0};//300,450,900,990      原始:1.5 0.6
+PIDType poszPID = {1  , 0.3, 0.2, 0, 0, 1000, 0, 0};
 /*
 *********************************************************************************************************
 *                                        fuzzy control    模糊控制
@@ -165,6 +173,55 @@ float PIDCal_Fuzzy ( PIDType *PIDptr, float ThisError ) // 模糊增量式PID
   
   return temp;
 }
+//
+//float PIDCal_pos ( PIDType *PID, float Error ) // 位置式PID (变速积分+死区)
+//{
+//  float Current_Error = fabs(Error);
+//  
+//  if(PID->delErr >= Current_Error){           //死区控制
+//    return 0;
+//  }
+//  else{
+//    float P, I, D, Icoe, speed;
+    
+//    if(Current_Error < 100){                  //依据误差大小变速积分
+//      Icoe = 1.0;
+//    }
+//    else if(Current_Error >1000){
+//      Icoe = 0.0;
+//    }
+//    else{
+//      Icoe = pow(E,(-Current_Error/100.0 - 1.0));
+//    }
+    
+//    P = PID->KP * (-Current_Error + PID->LastErr);                   //增量式PID
+//    I = PID->KI *  Current_Error * Icoe;
+//    D = PID->KD * (Current_Error - 2*PID->LastErr + PID->PreErr);
+    
+//    if((fabs(I) >= fabs(PID->KIlimit)) || (PID->KIlimit != 0)){
+//      if(I <= 0){                                                  //KI限幅(KI不等于0时开启)
+//        I = -1*PID->KIlimit;
+//      }
+//      else{
+//        I = PID->KIlimit;
+//      }
+//    }
+//    
+//    speed = P + I + D;
+//    
+//    PID->PreErr  = PID->LastErr;
+//    PID->LastErr = Current_Error;
+//    PID->SumErr += Current_Error;
+//    
+//    if(Error > 0){
+//      return speed*10000;
+//    }
+//    else{
+//     return -10000*speed;
+//    }
+//  }
+//}
+
 
 float PIDCal_pos ( PIDType *PIDptr, float ThisError ) // 位置式PID
 {
@@ -191,8 +248,8 @@ float PIDCal_pos ( PIDType *PIDptr, float ThisError ) // 位置式PID
   PIDptr->PreErr = PIDptr->LastErr;
   PIDptr->LastErr = ThisError;
   
-  if( abs( ThisError ) < 100 )
-    temp = integral * 1.3 + PIDptr->KP * pError * 0.4;
+  if( abs( ThisError ) < PIDptr->delErr )
+    temp = 0.0;
   if( abs( ThisError ) > 100 && abs( ThisError ) < 500 )
     temp = integral * 1.0 + PIDptr->KP * pError * 0.6;
   if( abs( ThisError ) > 500 && abs( ThisError ) < 1000 )
@@ -203,9 +260,6 @@ float PIDCal_pos ( PIDType *PIDptr, float ThisError ) // 位置式PID
 //  {
 //    temp = temp *0.6;
 //  }
-  
-  
-  
   return temp;
 }
 
@@ -216,22 +270,22 @@ void Position_PID(PIDType PID_X, PIDType PID_Y, PIDType PID_Z)
   
   if(fabs(PID_X.PreErr) <= fabs(PID_X.delErr))
   {
-    world.Vy = 0;
+    world.Vx = 0;
   }
   else
   {
-    if(fabs(PID_X.KP * PID_X.PreErr + PID_X.KI * PID_X.SumErr + PID_X.KD * (PID_X.PreErr - PID_X.LastErr)) >= 2000)
+    if(fabs(PID_X.KP * PID_X.PreErr + PID_X.KI * PID_X.SumErr + PID_X.KD * (PID_X.PreErr - PID_X.LastErr)) >= 500)
     {
       if(PID_X.PreErr > 0){
-        world.Vy = -2000;
+        world.Vx = 500;
       }
       else{
-        world.Vy = 2000;
+        world.Vx = 500;
       }
     }
     else
     {
-      world.Vy = (PID_X.KP * PID_X.PreErr + PID_X.KI * PID_X.SumErr + PID_X.KD * (PID_X.PreErr - PID_X.LastErr))*-1;
+      world.Vx = -(PID_X.KP * PID_X.PreErr + PID_X.KI * PID_X.SumErr + PID_X.KD * (PID_X.PreErr - PID_X.LastErr))*-1;
     }
      
   }
@@ -239,21 +293,21 @@ void Position_PID(PIDType PID_X, PIDType PID_Y, PIDType PID_Z)
   
   if(fabs(PID_Y.PreErr) <= fabs(PID_Y.delErr))
   {
-    world.Vx = 0;
+    world.Vy = 0;
   }
   else
   {
-    if(fabs(PID_Y.KP * PID_Y.PreErr + PID_Y.KI * PID_Y.SumErr + PID_Y.KD * (PID_Y.PreErr - PID_Y.LastErr)) >= 2000){
+    if(fabs(PID_Y.KP * PID_Y.PreErr + PID_Y.KI * PID_Y.SumErr + PID_Y.KD * (PID_Y.PreErr - PID_Y.LastErr)) >= 500){
       if(PID_Y.PreErr > 0){
-        world.Vx = 2000;
+        world.Vy = 500;
       }
       else{
-        world.Vx = -2000;
+        world.Vy = -500;
       }
     }
     else
     {
-      world.Vx = PID_Y.KP * PID_Y.PreErr + PID_Y.KI * PID_Y.SumErr + PID_Y.KD * (PID_Y.PreErr - PID_Y.LastErr);
+      world.Vy = (PID_Y.KP * PID_Y.PreErr + PID_Y.KI * PID_Y.SumErr + PID_Y.KD * (PID_Y.PreErr - PID_Y.LastErr));
     } 
   }
   
@@ -264,13 +318,13 @@ void Position_PID(PIDType PID_X, PIDType PID_Y, PIDType PID_Z)
   }
   else
   {
-    if(PID_Z.KP * PID_Z.PreErr + PID_Z.KI * PID_Z.SumErr + PID_Z.KD * (PID_Z.PreErr - PID_Z.LastErr) >=2000)
+    if(PID_Z.KP * PID_Z.PreErr + PID_Z.KI * PID_Z.SumErr + PID_Z.KD * (PID_Z.PreErr - PID_Z.LastErr) >=80)
     {
       if(PID_Z.PreErr > 0){
-        world.W = -2000;
+        world.W = -80;
       }
       else{
-        world.W = 2000;
+        world.W = 80;
       }
     }
     else

@@ -71,7 +71,6 @@ static void TaskBTcom(void *p_arg);
 
 extern PIDType X, Y, W;
 
-
 int main() // 主函数
 {
   
@@ -212,9 +211,9 @@ static void TaskSpeedCtrl(void *p_arg)
   {
 
     Sendwheel_Vel(); // 5,6,7,8速度环以及数据发送
-        Motor_Speed_Ctrl_C610();
-        Motor_Position_Ctrl_C610();
-        SetMotor_C610();
+    Motor_Speed_Ctrl_C610();
+    Motor_Position_Ctrl_C610();
+    SetMotor_C610();
     Motor_Speed_Ctrl_C620();
     Motor_Position_Ctrl();
     // 向C620电调发送期望电流值
@@ -247,10 +246,10 @@ static void TaskBTcom(void *p_arg)
   (void)&p_arg;
 
   OSTimeDlyHMSM(0u, 0u, 0u, 500u, OS_OPT_TIME_HMSM_STRICT, &err);
-
+  Action_Init();
   timer_init();
   stepper_motor_init();
-  Pre_capture();
+  //Pre_capture();
   while (1)
   { /////////////////底盘移动部分///////////////////////////////
 
@@ -261,17 +260,23 @@ static void TaskBTcom(void *p_arg)
 
     if (RockerR_Horizontal != RockerR_Horizontal_MEM) // 右摇杆水平移动->机器人平移
     {
-      world.Vx = deadarea_jugde(RockerR_Horizontal, 1024, 150) * speed_mapping;
+      world.Vy = deadarea_jugde(RockerR_Horizontal, 1024, 150) * speed_mapping;
     }
 
     if (RockerL_Horizontal != RockerL_Horizontal_MEM) // 左摇杆水平移动->机器人旋转
     {
-      world.W = -1 * deadarea_jugde(RockerL_Horizontal, 1024, 150) * speed_mapping / 20;
+      world.W = deadarea_jugde(RockerL_Horizontal, 1024, 150) * speed_mapping / 180;
     }
 
     if (RockerR_Vertical != RockerR_Vertical_MEM) // 右摇杆竖直移动->机器人前进
     {
-      world.Vy = deadarea_jugde(RockerR_Vertical, 1024, 150) * speed_mapping;
+      world.Vx = deadarea_jugde(RockerR_Vertical, 1024, 150) * speed_mapping;
+    }
+    if(RD != RD_MEM){
+      SetMotor_speed_VESC(109,(RD - 353)/(1695-353)*50);
+    }
+    if(LD != LD_MEM){
+      SetMotor_speed_VESC(127,(LD - 353)/(1695-353)*50);
     }
     if (SH > 1000)
     {
@@ -314,35 +319,42 @@ static void TaskBTcom(void *p_arg)
       Mt = get_position((RS-200.0)/200.0 + 31.0);
       stepper_motor_run(Mt - current_position);
     }
-    if(SB != SB_MEM)
-    {
-      if (SB >= 1200){
-        SetMotor_speed_VESC(1,0);
-        SetMotor_speed_VESC(2,0);
-      }
-      else if (SB <= 500){
-        SetMotor_speed_VESC(1,500);
-        SetMotor_speed_VESC(2,500);
-      }
-      else{
-        SetMotor_speed_VESC(1,200);
-        SetMotor_speed_VESC(2,200);
-      }
-    }
+//    if(SD  < 1000){
+//      Navigation(Navigation_Set);
+//    }
+//    if(SB != SB_MEM)
+//    {
+//      if (SB >= 1200){
+//        SetMotor_speed_VESC(1,0);
+//        SetMotor_speed_VESC(2,0);
+//      }
+//      else if (SB <= 500){
+//        SetMotor_speed_VESC(1,500);
+//        SetMotor_speed_VESC(2,500);
+//      }
+//      else{
+//        SetMotor_speed_VESC(1,200);
+//        SetMotor_speed_VESC(2,200);
+//      }
+//    }
     for (int i = 0; i < 18; i++)
     {
       CH_MEM[i] = CH[i];
     }
-    
-    
-    Tick = OSTimeGet(&err);
+  
+//    if(switch_flag == 0){
+//      OSTimeDlyHMSM(0u, 0u, 13u, 0u, OS_OPT_TIME_HMSM_STRICT, &err);
+//      switch_flag++;
+//    } 
+//    Robot_Position_Update(0);
+//    Tick = OSTimeGet(&err);
 //    Robot_Speed_C620();
-    Robot_Position_Update((Tick-preTick)/18000.0);
+//    Robot_Position_Update((Tick-preTick)/18300.0);
     //Robot_Position_Update(TIM_GetCounter(TIM5)/10000.0);
-    //Position_PID(X, Y, W);
-    Robot_Pos_Ctrl();
-    Robot_Speed_Ctrl();
-    preTick = Tick;
+//    Position_PID(X, Y, W);
+//    Robot_Pos_Ctrl();
+//    Robot_Speed_Ctrl();
+//    preTick = Tick;
 //    TIM_SetCounter(TIM5, 0);
     OSTimeDlyHMSM(0u, 0u, 0u, 5u, OS_OPT_TIME_HMSM_STRICT, &err);
   }

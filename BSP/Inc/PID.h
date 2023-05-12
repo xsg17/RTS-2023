@@ -59,6 +59,9 @@ extern PIDType X;
 extern PIDType Y;
 extern PIDType W;
 extern PIDType Stepper_Motor;
+extern PIDType NavigationPID;
+extern PIDType NavigationWPID;
+extern PIDType NavigationTPID;
 /*
 *********************************************************************************************************
 *                                             MODULE END

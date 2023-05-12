@@ -8,4 +8,8 @@
         <path>C:\Users\18311\Desktop\修改版\BSP\Src\remote.c</path>
         <encoding>System</encoding>
     </override>
+    <override>
+        <path>D:\Kipper\program\RTS\RTS-2023\BSP\Src\RobotCtrl.c</path>
+        <encoding>GB2312</encoding>
+    </override>
 </userOverrides>

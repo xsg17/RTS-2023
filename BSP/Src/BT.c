@@ -172,60 +172,60 @@ void LoRa_Init(void)
 //
 // }
 
-void USART3_IRQHandler(void)
-{
-  CPU_SR_ALLOC();
-
-  CPU_CRITICAL_ENTER();
-  OSIntEnter(); // Tell uC/OS-III that we are starting an ISR
-  CPU_CRITICAL_EXIT();
-  static union
-  {
-    uint8_t data[12];
-    float LaserVal[3];
-
-  } Laserposture;
-  if (USART_GetITStatus(USART3, USART_IT_RXNE) != RESET) // ���յ�����
-  {
-    //               while((USART2->SR&0X40)==0);//�ȴ����ͽ���
-    res = USART_ReceiveData(USART3);
-    //                 USART_SendData(USART2,res);
-    switch (BT_Step)
-    {
-    case 0:
-      if (res == 0xbb)
-      {
-        BT_Step++;
-        BT_Count = 0;
-      }
-      else
-        BT_Step = 0;
-      break;
-
-    case 1:
-      KEY_VALUE = res;
-      BT_Step++;
-      break;
-
-    case 2:
-      if (res == 0xee)
-      {
-        BT_Step = 0;
-        BT_Count = 0;
-      }
-      else
-        BT_Step = 0;
-      break;
-
-    default:
-      BT_Step = 0;
-      break;
-    }
-    //        while(USART_GetFlagStatus(USART2,USART_FLAG_TC)==RESET);//�ж��Ƿ������
-  }
-  USART_ClearITPendingBit(USART3, USART_IT_RXNE); // ���жϱ�־
-  OSIntExit();                                    // Tell uC/OS-III that we are leaving the ISR
-}
+//void USART3_IRQHandler(void)
+//{
+//  CPU_SR_ALLOC();
+//
+//  CPU_CRITICAL_ENTER();
+//  OSIntEnter(); // Tell uC/OS-III that we are starting an ISR
+//  CPU_CRITICAL_EXIT();
+//  static union
+//  {
+//    uint8_t data[12];
+//    float LaserVal[3];
+//
+//  } Laserposture;
+//  if (USART_GetITStatus(USART3, USART_IT_RXNE) != RESET) // ���յ�����
+//  {
+//    //               while((USART2->SR&0X40)==0);//�ȴ����ͽ���
+//    res = USART_ReceiveData(USART3);
+//    //                 USART_SendData(USART2,res);
+//    switch (BT_Step)
+//    {
+//    case 0:
+//      if (res == 0xbb)
+//      {
+//        BT_Step++;
+//        BT_Count = 0;
+//      }
+//      else
+//        BT_Step = 0;
+//      break;
+//
+//    case 1:
+//      KEY_VALUE = res;
+//      BT_Step++;
+//      break;
+//
+//    case 2:
+//      if (res == 0xee)
+//      {
+//        BT_Step = 0;
+//        BT_Count = 0;
+//      }
+//      else
+//        BT_Step = 0;
+//      break;
+//
+//    default:
+//      BT_Step = 0;
+//      break;
+//    }
+//    //        while(USART_GetFlagStatus(USART2,USART_FLAG_TC)==RESET);//�ж��Ƿ������
+//  }
+//  USART_ClearITPendingBit(USART3, USART_IT_RXNE); // ���жϱ�־
+//  OSIntExit();                                    // Tell uC/OS-III that we are leaving the ISR
+//}
 
 ///*
 //******************************************************************************
