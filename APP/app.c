@@ -71,6 +71,9 @@ static void TaskBTcom(void *p_arg);
 
 extern PIDType X, Y, W;
 
+
+//gxs做尝试
+
 int main() // 主函数
 {
   
