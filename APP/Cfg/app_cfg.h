@@ -48,7 +48,7 @@
 #define  TASK_PATHTRACK_STK_SIZE           		256u
 #define  TASK_SPEEDCTRL_STK_SIZE           		512u
 #define	 TASK_ACT_STK_SIZE						256u
-#define	 TASK_BTCOM_STK_SIZE					512u
+#define	 TASK_BTCOM_STK_SIZE					4096u
 #define	 TASK_RELAY_STK_SIZE					256u
 #define	 TASK_DJ_STK_SIZE					    256u
 

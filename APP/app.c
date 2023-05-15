@@ -252,76 +252,76 @@ static void TaskBTcom(void *p_arg)
   //Pre_capture();
   while (1)
   { /////////////////底盘移动部分///////////////////////////////
-
-    if ((LS != LS_MEM) || (abs(LS - LS_MEM) >= 5)) // 速度映射
-    {
-      speed_mapping = (LS - 353.0) / 1343.0 * 3.0;
-    }
-
-    if (RockerR_Horizontal != RockerR_Horizontal_MEM) // 右摇杆水平移动->机器人平移
-    {
-      world.Vy = deadarea_jugde(RockerR_Horizontal, 1024, 150) * speed_mapping;
-    }
-
-    if (RockerL_Horizontal != RockerL_Horizontal_MEM) // 左摇杆水平移动->机器人旋转
-    {
-      world.W = deadarea_jugde(RockerL_Horizontal, 1024, 150) * speed_mapping / 180;
-    }
-
-    if (RockerR_Vertical != RockerR_Vertical_MEM) // 右摇杆竖直移动->机器人前进
-    {
-      world.Vx = deadarea_jugde(RockerR_Vertical, 1024, 150) * speed_mapping;
-    }
-    if(RD != RD_MEM){
-      SetMotor_speed_VESC(109,(RD - 353)/(1695-353)*50);
-    }
-    if(LD != LD_MEM){
-      SetMotor_speed_VESC(127,(LD - 353)/(1695-353)*50);
-    }
-    if (SH > 1000)
-    {
-      if (trigger_flag)
-      {
-        MOTOR[7].Expvel = 6000;
-        MOTOR[7].Exparg += 157293.5; // 一圈
-        trigger_flag = 0;
-      }
-    }
-    else
-    {
-      trigger_flag = 1;
-    }
-    if ((SF >= (SF_MEM + 400)) || (SF <= (SF_MEM - 400)))
-    {
-      if (capture_flag && (!switch_flag))
-      {
-        Capture();
-        capture_flag = 0;
-        release_flag = 1;
-        switch_flag = !switch_flag; 
-      }
-      else if(release_flag && switch_flag)
-      {
-          Re_capture();
-          release_flag = 0;
-          capture_flag = 1;
-          switch_flag = !switch_flag;
-      }
-    }
-    else
-    {
-      capture_flag = 1;
-      release_flag = 1;
-    }
-    
-    if(RS != RS_MEM)
-    {
-      Mt = get_position((RS-200.0)/200.0 + 31.0);
-      stepper_motor_run(Mt - current_position);
-    }
-//    if(SD  < 1000){
-//      Navigation(Navigation_Set);
+//
+//    if ((LS != LS_MEM) || (abs(LS - LS_MEM) >= 5)) // 速度映射
+//    {
+//      speed_mapping = (LS - 353.0) / 1343.0 * 3.0;
 //    }
+//
+//    if (RockerR_Horizontal != RockerR_Horizontal_MEM) // 右摇杆水平移动->机器人平移
+//    {
+//      world.Vy = deadarea_jugde(RockerR_Horizontal, 1024, 150) * speed_mapping;
+//    }
+//
+//    if (RockerL_Horizontal != RockerL_Horizontal_MEM) // 左摇杆水平移动->机器人旋转
+//    {
+//      world.W = deadarea_jugde(RockerL_Horizontal, 1024, 150) * speed_mapping / 180;
+//    }
+//
+//    if (RockerR_Vertical != RockerR_Vertical_MEM) // 右摇杆竖直移动->机器人前进
+//    {
+//      world.Vx = deadarea_jugde(RockerR_Vertical, 1024, 150) * speed_mapping;
+//    }
+//    if(RD != RD_MEM){
+//      SetMotor_speed_VESC(109,(RD - 353)/(1695-353)*50);
+//    }
+//    if(LD != LD_MEM){
+//      SetMotor_speed_VESC(127,(LD - 353)/(1695-353)*50);
+//    }
+//    if (SH > 1000)
+//    {
+//      if (trigger_flag)
+//      {
+//        MOTOR[7].Expvel = 6000;
+//        MOTOR[7].Exparg += 157293.5; // 一圈
+//        trigger_flag = 0;
+//      }
+//    }
+//    else
+//    {
+//      trigger_flag = 1;
+//    }
+//    if ((SF >= (SF_MEM + 400)) || (SF <= (SF_MEM - 400)))
+//    {
+//      if (capture_flag && (!switch_flag))
+//      {
+//        Capture();
+//        capture_flag = 0;
+//        release_flag = 1;
+//        switch_flag = !switch_flag; 
+//      }
+//      else if(release_flag && switch_flag)
+//      {
+//          Re_capture();
+//          release_flag = 0;
+//          capture_flag = 1;
+//          switch_flag = !switch_flag;
+//      }
+//    }
+//    else
+//    {
+//      capture_flag = 1;
+//      release_flag = 1;
+//    }
+//    
+//    if(RS != RS_MEM)
+//    {
+//      Mt = get_position((RS-200.0)/200.0 + 31.0);
+//      stepper_motor_run(Mt - current_position);
+//    }
+    
+      Navigation(Navigation_Set);
+    
 //    if(SB != SB_MEM)
 //    {
 //      if (SB >= 1200){
@@ -337,10 +337,10 @@ static void TaskBTcom(void *p_arg)
 //        SetMotor_speed_VESC(2,200);
 //      }
 //    }
-    for (int i = 0; i < 18; i++)
-    {
-      CH_MEM[i] = CH[i];
-    }
+//    for (int i = 0; i < 18; i++)
+//    {
+//      CH_MEM[i] = CH[i];
+//    }
   
 //    if(switch_flag == 0){
 //      OSTimeDlyHMSM(0u, 0u, 13u, 0u, OS_OPT_TIME_HMSM_STRICT, &err);
